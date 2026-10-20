@@ -1,0 +1,123 @@
+:root {
+  --bleu-pastel: #a3c9f1;
+  --lavande: #cbb4d4;
+  --blanc: #ffffff;
+  --gris-clair: #f5f5f7;
+  --texte-principal: #333;
+  --bouton-bg: #a3c9f1;
+  --bouton-hover: #7aabe7;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--gris-clair);
+  color: var(--texte-principal);
+}
+
+/* Nouveau Hero avec image */
+.hero-image {
+  background: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1500&q=80') center/cover no-repeat;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--blanc);
+  text-align: center;
+  padding: 0 20px;
+}
+
+.hero-image::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(163, 201, 241, 0.4);
+  backdrop-filter: blur(3px);
+  z-index: 0;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.hero-content p {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  font-weight: 300;
+}
+
+.btn-primary {
+  background-color: var(--blanc);
+  color: var(--bouton-bg);
+  padding: 15px 40px;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(255,255,255,0.6);
+  transition: background-color 0.3s, color 0.3s;
+}
+.btn-primary:hover {
+  background-color: var(--lavande);
+  color: var(--blanc);
+}
+
+/* Header + Footer (inchangés) */
+header {
+  background-color: var(--blanc);
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+header .logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--bleu-pastel);
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--texte-principal);
+  margin-left: 25px;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+nav a:hover {
+  color: var(--bleu-pastel);
+}
+
+footer {
+  background-color: var(--blanc);
+  text-align: center;
+  padding: 20px;
+  color: #999;
+  font-size: 0.9rem;
+  margin-top: 60px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+  .hero-content p {
+    font-size: 1rem;
+    padding: 0 10px;
+  }
+}
