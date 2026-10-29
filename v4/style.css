@@ -168,7 +168,7 @@ nav > a:hover, .menu-trigger:hover, .has-menu:focus-within .menu-trigger { color
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(0deg, var(--night) 0%, rgba(11, 21, 20, 0.62) 38%, rgba(11, 21, 20, 0.15) 75%, rgba(11, 21, 20, 0.4) 100%);
+  background: linear-gradient(0deg, var(--night) 0%, rgba(11, 21, 20, 0.5) 30%, rgba(11, 21, 20, 0.06) 68%, rgba(11, 21, 20, 0.22) 100%);
 }
 
 .hero-content {
@@ -266,7 +266,7 @@ nav > a:hover, .menu-trigger:hover, .has-menu:focus-within .menu-trigger { color
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(0deg, rgba(11, 21, 20, 0.92) 0%, rgba(11, 21, 20, 0.35) 55%, rgba(11, 21, 20, 0.1) 100%);
+  background: linear-gradient(0deg, rgba(11, 21, 20, 0.85) 0%, rgba(11, 21, 20, 0.25) 50%, rgba(11, 21, 20, 0) 100%);
 }
 .service > div { position: relative; }
 .service h3 {
@@ -438,7 +438,7 @@ footer p { margin: 8px 0 0; max-width: 320px; }
   .text-link { margin-top: 20px; }
   .service-list { grid-template-columns: 1fr; gap: 14px; }
   .service { aspect-ratio: 16 / 11; padding: 20px; }
-  .service::before { background: linear-gradient(0deg, rgba(11, 21, 20, 0.96) 0%, rgba(11, 21, 20, 0.72) 55%, rgba(11, 21, 20, 0.2) 100%); }
+  .service::before { background: linear-gradient(0deg, rgba(11, 21, 20, 0.82) 0%, rgba(11, 21, 20, 0.4) 50%, rgba(11, 21, 20, 0) 100%); }
   .methode-list { grid-template-columns: 1fr; }
   .contact { min-height: 50vh; }
   .contact-link { align-self: flex-start; }
@@ -461,3 +461,6 @@ footer p { margin: 8px 0 0; max-width: 320px; }
 }
 .contact-form button:hover { background: #1b3a37; }
 .form-note { margin: 0; font-size: 0.85rem; opacity: 0.7; }
+
+/* Lisibilité du texte sur les photos (les voiles sont légers) */
+.hero-content h1, .hero-content .hero-intro, .hero-content .text-link, .eyebrow-pill, .service h3, .service p { text-shadow: 0 1px 14px rgba(0, 0, 0, 0.45); }
