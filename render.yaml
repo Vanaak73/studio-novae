@@ -1,4 +1,4 @@
-# Aperçu privé de Studio Novae (Render, offre gratuite) : documentation de la configuration du service.
+# Aperçu de Studio Novae (Render, offre gratuite) : documentation de la configuration du service.
 services:
   - type: web
     name: studio-novae
@@ -7,8 +7,3 @@ services:
     region: frankfurt
     branch: main
     autoDeploy: true
-    envVars:
-      - key: PREVIEW_USER
-        value: apercu
-      - key: PREVIEW_PASSWORD   # à saisir dans le tableau de bord Render (secret, jamais dans Git)
-        sync: false

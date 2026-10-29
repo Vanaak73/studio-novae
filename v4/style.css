@@ -155,12 +155,14 @@ nav > a:hover, .menu-trigger:hover, .has-menu:focus-within .menu-trigger { color
   position: absolute;
   left: 0;
   right: 0;
-  top: -140px;
-  bottom: -140px;
+  top: -60px;
+  bottom: 0;
   z-index: 0;
-  background: var(--img, url('../assets/images/montagnes-coucher-soleil.jpg')) center / cover no-repeat;
+  background: var(--img, url('../assets/images/montagnes-coucher-soleil.jpg')) center var(--pos, 50%) / cover no-repeat;
   will-change: transform;
 }
+
+.hero .hero-bg { top: -130px; }
 
 .hero-overlay {
   position: absolute;
@@ -256,7 +258,7 @@ nav > a:hover, .menu-trigger:hover, .has-menu:focus-within .menu-trigger { color
   overflow: hidden;
   text-decoration: none;
   color: #fff;
-  background: var(--img) center / cover no-repeat;
+  background: var(--img) center var(--pos, 50%) / cover no-repeat;
   outline: 1px solid transparent;
   transition: outline-color 0.3s ease;
 }
@@ -444,3 +446,18 @@ footer p { margin: 8px 0 0; max-width: 320px; }
   .footer-links { justify-content: flex-start; }
   .footer-copy { flex-direction: column; gap: 8px; }
 }
+
+/* Formulaire de demande */
+.contact-form { margin-top: 3vw; max-width: 640px; display: grid; gap: 18px; }
+.contact-form label { display: grid; gap: 6px; font-size: 0.9rem; font-weight: 600; }
+.contact-form input, .contact-form select, .contact-form textarea {
+  font: inherit; font-weight: 400; padding: 12px 14px; border: 1px solid rgba(15, 28, 27, 0.25);
+  border-radius: 3px; background: #fff; color: inherit;
+}
+.contact-form input:focus, .contact-form select:focus, .contact-form textarea:focus { outline: 2px solid rgba(79, 194, 186, 0.6); border-color: transparent; }
+.contact-form button {
+  justify-self: start; font: inherit; font-weight: 600; padding: 14px 26px; border: 0; border-radius: 30px;
+  background: var(--night); color: #fff; cursor: pointer; transition: background 0.2s ease;
+}
+.contact-form button:hover { background: #1b3a37; }
+.form-note { margin: 0; font-size: 0.85rem; opacity: 0.7; }

@@ -35,8 +35,10 @@
   if (layers.length && !reduced && !touch) {
     var ticking = false;
     var update = function () {
-      var offset = Math.min(window.scrollY * 0.35, 130);
-      layers.forEach(function (layer) { layer.style.transform = 'translateY(' + offset + 'px)'; });
+      layers.forEach(function (layer) {
+        var max = -parseFloat(window.getComputedStyle(layer).top) || 0;
+        layer.style.transform = 'translateY(' + Math.min(window.scrollY * 0.35, max) + 'px)';
+      });
       ticking = false;
     };
     window.addEventListener('scroll', function () {

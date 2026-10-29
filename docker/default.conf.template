@@ -3,10 +3,11 @@ server {
     root /usr/share/nginx/html;
     index index.html;
 
-    # Aperçu privé : mot de passe sur TOUT (pages, images, scripts) + jamais indexé
-    auth_basic "Apercu prive Studio Novae";
-    auth_basic_user_file /etc/nginx/preview.htpasswd;
+    # Aperçu public sans mot de passe, mais jamais indexé par les moteurs de recherche
     add_header X-Robots-Tag "noindex, nofollow, noarchive" always;
+
+    # Anciennes adresses des pages services -> /services/
+    rewrite ^/(site-vitrine|outil-metier|boutique-en-ligne|automatisation-ia)\.html$ /services/$1.html permanent;
 
     location / {
         try_files $uri $uri/ =404;
