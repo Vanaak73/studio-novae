@@ -1,16 +1,11 @@
-# Studio Novae : site construit puis servi par Node (voir build.js et server.js).
-# Render fournit le port dans la variable PORT.
-FROM node:22-alpine
-WORKDIR /app
+# Aperçu Studio Novae sur Render : site statique servi par nginx (voir docker/).
+FROM nginx:alpine
 
-ENV NODE_ENV=production
+# Render fournit le port d'écoute dans la variable PORT (substituée dans le modèle au démarrage)
 ENV PORT=10000
+COPY docker/default.conf.template /etc/nginx/templates/default.conf.template
 
-COPY package.json server.js build.js ./
-COPY v4/ ./v4/
-COPY assets/ ./assets/
-RUN npm run build
+COPY v4/ /usr/share/nginx/html/
+COPY assets/ /usr/share/nginx/html/assets/
 
-USER node
 EXPOSE 10000
-CMD ["node", "server.js"]
