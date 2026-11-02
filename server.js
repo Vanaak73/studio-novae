@@ -6,8 +6,10 @@ const path = require('path');
 
 const PORT = Number(process.env.PORT) || 10000;
 const NOINDEX = process.env.NOINDEX !== '0';
-const SITE = path.join(__dirname, 'v4');
-const ASSETS = path.join(__dirname, 'assets');
+// Après `npm run build`, tout est servi depuis dist/ ; sans build, directement depuis v4/ et assets/.
+const DIST = path.join(__dirname, 'dist');
+const SITE = fs.existsSync(DIST) ? DIST : path.join(__dirname, 'v4');
+const ASSETS = fs.existsSync(DIST) ? path.join(DIST, 'assets') : path.join(__dirname, 'assets');
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
