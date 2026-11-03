@@ -575,3 +575,7 @@ nav > a:not(.nav-devis)::after, .menu-trigger::after { left: 10px; right: 10px; 
 .bouton-aides { font-family: var(--display); line-height: 1.2; cursor: pointer; }
 .bouton-aides-sec { background: #183433; border-color: #183433; color: #ffffff; }
 .bouton-aides-sec:hover { background: #24504c; border-color: #24504c; color: #ffffff; }
+
+/* Pied de page : mention de l'auteur des images (licence Magnific, ex-Freepik), lien souligné et lisible */
+.footer-copy span a { text-decoration: underline; text-underline-offset: 3px; }
+.footer-copy span a:hover { color: var(--accent-soft); }

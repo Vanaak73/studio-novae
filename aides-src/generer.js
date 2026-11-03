@@ -99,7 +99,7 @@ const pied = (scripts = '') => `
       <a href="/a-propos.html">À propos</a>
       <a href="mailto:${MAIL}">Contact</a>
     </div>
-    <div class="footer-copy"><span>© 2026 Studio Novae</span><a href="#top">Retour en haut ↑</a></div>
+    <div class="footer-copy"><span>© 2026 Studio Novae</span><span>Images : <a href="https://www.magnific.com/" target="_blank" rel="noopener">Designed by Magnific</a></span><a href="#top">Retour en haut ↑</a></div>
   </footer>
 ${scripts}</body>
 </html>

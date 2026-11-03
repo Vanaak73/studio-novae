@@ -57,6 +57,7 @@ async function demarrerServeur() {
         verifier(groupe, `${url} : aucune ressource en échec (images, CSS, JS)`, echecs.length === 0, [...new Set(echecs)].slice(0, 3).join(' ; '));
         verifier(groupe, `${url} : aucune erreur JavaScript`, erreurs.length === 0, erreurs[0] || '');
         verifier(groupe, `${url} : pas de débordement horizontal`, !info.debord);
+        if (vue === 'bureau') verifier('Mentions', `${url} : « Images : Designed by Magnific » dans le pied de page, avec lien`, await page.evaluate(() => { const a = [...document.querySelectorAll('footer a')].find((x) => /Designed by Magnific/.test(x.textContent)); return !!a && /magnific\.com/.test(a.href); }));
         if (url.startsWith('/aide-creation-site-web/')) verifier(groupe, `${url} : un seul titre H1`, info.h1 === 1, 'h1 : ' + info.h1);
         if (vue === 'bureau') {
           verifier('En-tête', `${url} : taille normale en haut de page (pas de mode compact)`, info.haut === (menus.__haut = menus.__haut || info.haut) && !/plein|cache/.test(info.classes), `hauteur ${info.haut} px, classes « ${info.classes} »`);
