@@ -464,3 +464,93 @@ footer p { margin: 8px 0 0; max-width: 320px; }
 
 /* Lisibilité du texte sur les photos (les voiles sont légers) */
 .hero-content h1, .hero-content .hero-intro, .hero-content .text-link, .eyebrow-pill, .service h3, .service p { text-shadow: 0 1px 14px rgba(0, 0, 0, 0.45); }
+
+/* Accueil : bande vers les aides à la création de site web */
+.aides-accueil { padding: 8vw var(--gutter); background: #ffffff; --text: #0f1c1b; --muted: rgba(15, 28, 27, 0.68); --line: rgba(15, 28, 27, 0.16); --accent: #1a7f77; --accent-soft: #1a7f77; color: var(--text); }
+.aides-accueil h2 { max-width: 760px; margin: 18px 0 14px; font-family: var(--display); font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 300; letter-spacing: -0.035em; line-height: 1.1; }
+.aides-accueil h2 em { color: var(--accent); }
+.aides-accueil p:not(.eyebrow) { max-width: 520px; margin: 0 0 34px; color: var(--muted); font-size: 1.05rem; }
+.aides-accueil .contact-link { align-self: flex-start; }
+
+.aides-accueil { display: grid; grid-template-columns: 1.05fr 1fr; gap: 5vw; align-items: center; }
+.aides-photo { width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 4px; box-shadow: 0 18px 40px rgba(15, 28, 27, 0.12); }
+@media (max-width: 900px) { .aides-accueil { grid-template-columns: 1fr; gap: 28px; } }
+
+.bouton-aides { display: inline-flex; align-items: center; gap: 10px; padding: 14px 30px; border: 2px solid #1a7f77; border-radius: 30px; background: #1a7f77; color: #ffffff; font-family: var(--display); font-size: 1rem; font-weight: 600; text-decoration: none; transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease; }
+.bouton-aides span { color: #ffffff; }
+.bouton-aides:hover { background: #146b64; border-color: #146b64; transform: translateY(-1px); }
+.bouton-aides:focus-visible { outline: 2px solid #146b64; outline-offset: 4px; }
+
+/* Pied de page : le logo reste sur une ligne, les liens passent à la ligne dans leur colonne */
+footer .logo { white-space: nowrap; }
+@media (min-width: 651px) { footer { grid-template-columns: minmax(230px, 280px) 1fr; } }
+
+/* Accueil : ligne fine entre la bande aides (blanche) et les réalisations (gris clair) */
+.aides-accueil + .realisations { border-top: 1px solid rgba(15, 28, 27, 0.1); }
+
+/* Menu : textes alignés sur la même ligne verticale */
+@media (min-width: 651px) { .has-menu { display: flex; align-items: center; } }
+.nav-contact { padding-top: 4px; }
+
+/* Menu : soulignement animé au survol : part de la gauche, repart vers la gauche, couleur du texte survolé, près du texte */
+nav > a:not(.nav-devis), .menu-trigger { position: relative; }
+nav > a:not(.nav-devis)::after, .menu-trigger::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 1px; height: 2px; background: var(--accent-soft);
+  transform: scaleX(0); transform-origin: left center; transition: transform 0.3s ease; pointer-events: none;
+}
+.aides nav > a:not(.nav-devis)::after, .aides .menu-trigger::after { background: var(--teal); }
+@media (hover: hover) {
+  nav > a:not(.nav-devis):hover::after, .has-menu:hover .menu-trigger::after { transform: scaleX(1); }
+}
+nav > a:not(.nav-devis):focus-visible::after, .has-menu:focus-within .menu-trigger::after { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) { nav > a::after, .menu-trigger::after { transition: none; } }
+nav > a.nav-contact:not(.nav-devis)::after { bottom: -1px; }
+
+/* Menu : chaque lien est une case (padding 10 + marge 5 de chaque côté = 30 px entre deux textes) */
+nav { gap: 0; margin-right: -15px; }
+nav > a:not(.nav-devis), .menu-trigger { margin: 0 5px; padding: 3px 10px; }
+nav > a.nav-contact:not(.nav-devis) { padding: 4px 10px 3px; }
+nav > a:not(.nav-devis)::after, .menu-trigger::after { bottom: 0; }
+nav > a.nav-contact:not(.nav-devis)::after { bottom: -1px; }
+.nav-devis { margin-left: 15px; }
+@media (min-width: 651px) {
+  .has-menu { padding: 7px 0; }
+  .submenu { left: -3px; top: calc(100% + 3px); }
+  .submenu::before { content: ""; position: absolute; left: 0; right: 0; top: -3px; height: 3px; }
+}
+
+/* Menu : les cases remplissent la hauteur du nav (42 px, au-dessus de 650 px), texte centré par la hauteur de ligne */
+@media (min-width: 651px) {
+  nav { align-items: stretch; height: 42px; }
+  .has-menu { padding: 0; display: flex; align-items: stretch; }
+  nav > a:not(.nav-devis), .menu-trigger { padding-top: 0; padding-bottom: 0; line-height: 42px; }
+  nav > a.nav-contact:not(.nav-devis) { padding-top: 1px; line-height: 40px; }
+  nav > a.nav-devis { align-self: center; }
+}
+
+/* Menu : ligne rapprochée du texte (ordinateur) */
+@media (min-width: 651px) {
+  nav > a:not(.nav-devis)::after, .menu-trigger::after { bottom: 8px; }
+  nav > a.nav-contact:not(.nav-devis) { border-bottom: 0; padding-top: 0; line-height: 42px; }
+  nav > a.nav-contact:not(.nav-devis)::before { content: ""; position: absolute; left: 0; right: 0; bottom: 8px; height: 1px; background: #ffffff; pointer-events: none; }
+  .aides nav > a.nav-contact:not(.nav-devis)::before { background: var(--encre); }
+  nav > a.nav-contact:not(.nav-devis)::after { bottom: 7px; }
+}
+
+/* « Nous contacter » : aucune ligne permanente, seule la ligne animée du survol */
+nav > a.nav-contact:not(.nav-devis) { border-bottom: 0; }
+nav > a.nav-contact:not(.nav-devis)::before { content: none; }
+@media (min-width: 651px) { nav > a.nav-contact:not(.nav-devis)::after { bottom: 8px; } }
+@media (max-width: 650px) { nav > a.nav-contact:not(.nav-devis) { padding: 4px 10px; } }
+
+/* Menu : la ligne de survol a la largeur du texte (pas celle de la case) */
+nav > a:not(.nav-devis)::after, .menu-trigger::after { left: 10px; right: 10px; }
+
+/* Accueil : ligne fine entre les réalisations (gris clair) et le contact (gris clair) */
+.realisations + .contact { border-top: 1px solid rgba(15, 28, 27, 0.1); }
+
+/* Accueil, bande aides : deux boutons côte à côte, même taille */
+.aides-boutons { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+.bouton-aides { font-family: var(--display); line-height: 1.2; cursor: pointer; }
+.bouton-aides-sec { background: #183433; border-color: #183433; color: #ffffff; }
+.bouton-aides-sec:hover { background: #24504c; border-color: #24504c; color: #ffffff; }

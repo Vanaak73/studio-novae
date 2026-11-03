@@ -1,0 +1,191 @@
+/* Section « Aides à la création de site web » : hub, questionnaire et pages par région.
+   Chargé après style.css. Tout est limité à body.aides. */
+
+body.aides {
+  --gutter: 5vw;
+  --clair: #eef1ee;
+  --blanc: #ffffff;
+  --encre: #0f1c1b;
+  --teal: #1a7f77;
+  --teal-fonce: #146b64;
+  --teal-clair: #228e85;
+}
+
+/* En-tête : sur fond clair, dans le flux de la page */
+.aides .site-header { background: var(--clair); }
+.aides .site-header { padding-left: 5vw; padding-right: 5vw; }
+.aides .site-header.plein { background: rgba(238, 241, 238, .92); box-shadow: 0 1px 0 rgba(15, 28, 27, .1); }
+.aides main { padding-top: 98px; }
+@media (max-width: 650px) { .aides main { padding-top: 74px; } }
+.aides .logo { color: var(--encre); }
+.aides nav > a, .aides .menu-trigger { color: var(--encre); opacity: .78; }
+.aides nav > a:hover, .aides .menu-trigger:hover, .aides .has-menu:focus-within .menu-trigger { color: var(--teal); opacity: 1; }
+.aides .nav-contact { border-bottom-color: var(--encre); }
+.aides .nav-contact span { color: var(--teal); }
+
+/* Bandes */
+.aides main { background: var(--clair); }
+.az { padding: clamp(56px, 7vw, 104px) 0; }
+.az-in { max-width: 1100px; margin: 0 auto; padding: 0 var(--gutter); }
+.az-claire, .az-blanche {
+  --text: var(--encre); --muted: rgba(15, 28, 27, .68); --line: rgba(15, 28, 27, .16);
+  --accent: var(--teal); --accent-soft: var(--teal);
+  background: var(--clair); color: var(--encre);
+}
+.az-blanche { background: var(--blanc); }
+.az-sombre { background: linear-gradient(180deg, #0b1514 0%, #102322 100%); color: var(--text); }
+.az-intro { padding-top: clamp(28px, 4vw, 56px); padding-bottom: clamp(48px, 6vw, 88px); }
+
+.az .eyebrow { margin: 0 0 12px; }
+.az h1 { margin: 0 0 18px; font-family: var(--display); font-weight: 500; letter-spacing: -.02em; font-size: clamp(2rem, 4.6vw, 3.4rem); line-height: 1.1; }
+.az h1 em { color: var(--teal); }
+.az .chapo { max-width: 640px; margin: 0 0 40px; font-size: 1.15rem; line-height: 1.55; color: var(--muted); }
+.az-titre { margin: 0 0 36px; font-family: var(--display); font-weight: 300; font-size: clamp(1.8rem, 3.4vw, 2.8rem); letter-spacing: -.035em; line-height: 1.1; }
+.fil { margin: 0 0 22px; font-family: var(--display); font-size: .9rem; color: var(--muted); }
+.fil a { color: var(--teal); text-decoration: none; }
+.fil a:hover { text-decoration: underline; }
+
+/* Boutons */
+.az-actions { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: center; }
+.btn-aide { display: inline-block; padding: 13px 28px; border: 2px solid var(--b-bord, var(--teal)); border-radius: 30px; background: var(--b-fond, var(--teal)); color: var(--b-texte, #fff);
+  font-family: var(--display); font-weight: 600; font-size: 1rem; text-decoration: none; cursor: pointer; transition: transform .2s, background .2s, color .2s; }
+.btn-aide:hover { background: var(--b-survol, var(--teal-fonce)); border-color: var(--b-survol, var(--teal-fonce)); transform: translateY(-1px); }
+.btn-aide.sec { --b-fond: transparent; --b-texte: var(--text); --b-bord: var(--line); --b-survol: rgba(26, 127, 119, .1); }
+.btn-aide.sec:hover { color: var(--text); border-color: var(--teal); }
+.az-sombre .btn-aide { --b-fond: #4fc2ba; --b-texte: #062321; --b-bord: #4fc2ba; --b-survol: #9fd8d3; }
+.lien-contact { font-family: var(--display); color: inherit; text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 3px; }
+.lien-contact span { color: var(--accent); }
+
+/* Questionnaire : o----o----o */
+.qs-etapes { display: flex; align-items: flex-start; width: calc(100% - 200px); margin: 0 100px 36px; }
+.qs-etape { background: none; border: 0; padding: 0; width: 28px; white-space: nowrap; display: flex; flex-direction: column; align-items: center; gap: 10px; font-family: var(--display); font-size: .88rem; color: var(--muted); cursor: pointer; }
+.qs-etape:disabled { cursor: default; }
+.qs-rond { width: 28px; height: 28px; border-radius: 50%; border: 2px solid rgba(15, 28, 27, .28); display: grid; place-items: center; font-size: .8rem; font-weight: 600; color: var(--muted); transition: all .25s; }
+.qs-etape.actif { color: var(--text); }
+.qs-etape.actif .qs-rond { border-color: var(--teal); color: var(--teal); box-shadow: 0 0 0 5px rgba(26, 127, 119, .2); }
+.qs-etape.fait { color: var(--text); }
+.qs-etape.fait .qs-rond { background: var(--teal); border-color: var(--teal); color: #fff; }
+.qs-etape svg { width: 14px; height: 14px; }
+.qs-trait { flex: 1; height: 2px; margin: 13px 10px 0; border-radius: 2px; background: rgba(15, 28, 27, .16); transition: background .25s; }
+.qs-trait.fait { background: var(--teal); }
+.qs-question { margin: 0 0 20px; font-family: var(--display); font-size: 1.5rem; font-weight: 500; letter-spacing: -.01em; }
+.qs-choix { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.qs-choix button { width: calc((100% - 30px) / 4); height: 84px; padding: 0 18px; display: flex; flex-direction: column; justify-content: center; overflow-wrap: anywhere; text-align: left;
+  color: #fff; background: linear-gradient(180deg, var(--teal-clair), var(--teal)); border: 1px solid var(--teal); border-radius: 12px; font: 500 1rem var(--display);
+  box-shadow: 0 1px 2px rgba(15, 28, 27, .12), inset 0 1px 0 rgba(255, 255, 255, .14); cursor: pointer; transition: filter .2s ease, transform .2s ease, box-shadow .2s ease; }
+.qs-choix button small { display: block; margin-top: 4px; font: 400 .82rem var(--sans); color: rgba(255, 255, 255, .88); }
+@media (hover: hover) {
+  .qs-choix button:hover { filter: brightness(.86) saturate(1.05); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(15, 28, 27, .18), inset 0 1px 0 rgba(255, 255, 255, .14); }
+}
+.qs-choix button:focus-visible { outline: 2px solid var(--teal-fonce); outline-offset: 2px; filter: brightness(.86); }
+.qs-choix button:active { transform: translateY(0); filter: brightness(.8); }
+.qs-retour { margin-top: 22px; background: none; border: 0; color: var(--muted); font: 400 .92rem var(--display); padding: 6px 0; cursor: pointer; }
+.qs-retour:hover { color: var(--text); }
+
+/* Résultat du questionnaire */
+.qs-recap { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
+.qs-recap button { padding: 8px 14px; border: 1px solid var(--teal); border-radius: 30px; background: linear-gradient(180deg, var(--teal-clair), var(--teal)); color: #fff; font: 500 .88rem var(--display); cursor: pointer; }
+.qs-recap button:hover { filter: brightness(.88); }
+.qs-recap button span { color: rgba(255, 255, 255, .86); margin-right: 6px; }
+.qs-aides { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 12px; margin-bottom: 30px; }
+.qs-aide { display: flex; flex-direction: column; gap: 8px; padding: 22px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+.qs-aide.region { border-color: rgba(26, 127, 119, .55); background: rgba(26, 127, 119, .07); }
+.qs-aide .niveau { font: 500 .78rem var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--teal); }
+.qs-aide h3 { margin: 0; font: 500 1.25rem var(--display); letter-spacing: -.01em; }
+.qs-aide .montant { font: 500 1.4rem var(--display); letter-spacing: -.02em; color: var(--teal-fonce); }
+.qs-aide ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: .92rem; }
+.qs-aide .fiabilite { align-self: flex-start; }
+
+/* Pastilles de fiabilité */
+.fiabilite { padding: 4px 10px; border-radius: 30px; font: 500 .72rem var(--display); white-space: nowrap; }
+.f-officiel { background: rgba(26, 127, 119, .14); color: #146b64; }
+.f-annuaire { background: rgba(180, 128, 46, .16); color: #7a5314; }
+.f-article { background: rgba(224, 106, 90, .16); color: #9c3b2d; }
+
+/* Ce qu'il faut savoir */
+.az-trois { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 4vw, 56px); }
+.az-trois article { border-top: 1px solid var(--line); padding-top: 20px; }
+.az-trois .num { display: block; margin-bottom: 14px; font: 400 1rem var(--display); color: var(--teal); }
+.az-trois h3 { margin: 0 0 10px; font: 500 1.35rem var(--display); letter-spacing: -.02em; }
+.az-trois p { margin: 0; line-height: 1.6; color: var(--muted); }
+
+/* FAQ */
+.az-faq { border-top: 1px solid var(--line); }
+.az-faq details { border-bottom: 1px solid var(--line); }
+.az-faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 22px 0; font: 500 1.12rem var(--display); letter-spacing: -.01em; }
+.az-faq summary::-webkit-details-marker { display: none; }
+.az-faq summary::after { content: ""; flex: none; width: 12px; height: 12px; margin-top: -4px; border-right: 2px solid var(--accent); border-bottom: 2px solid var(--accent); transform: rotate(45deg); transition: transform .25s; }
+.az-faq details[open] summary::after { transform: rotate(-135deg); margin-top: 4px; }
+.az-faq summary:hover { color: var(--accent-soft); }
+.az-faq p { margin: 0 0 24px; max-width: 700px; line-height: 1.75; color: var(--muted); }
+.az-sources { margin: 28px 0 0; font-size: .92rem; color: var(--muted); }
+.az-sources a { color: var(--accent); }
+
+/* Régions (pastilles) */
+.az-regions { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 44px; }
+.az-regions a { padding: 9px 16px; border: 1px solid var(--line); border-radius: 30px; color: inherit; text-decoration: none; font: 400 .92rem var(--display); transition: border-color .2s, background .2s; }
+.az-regions a:hover { border-color: var(--accent); background: rgba(79, 194, 186, .1); }
+.az-claire .az-regions a:hover, .az-blanche .az-regions a:hover { background: rgba(26, 127, 119, .08); }
+.az-regions a[aria-current="page"] { border-color: var(--accent); }
+
+/* Pages par région : dispositifs référencés */
+.az-dispos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 14px; }
+.az-dispo { display: flex; flex-direction: column; gap: 8px; padding: 24px; border: 1px solid var(--line); border-radius: 16px; background: #f6f8f6; }
+.az-dispo-tete { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+.az-type { font: 600 .72rem var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--teal); }
+.az-dispo h3 { margin: 0; font: 500 1.3rem var(--display); letter-spacing: -.02em; }
+.az-dispo .montant { font: 400 1.15rem var(--display); color: var(--teal-fonce); }
+.az-dispo ul { margin: 4px 0 0; padding-left: 18px; color: var(--muted); font-size: .95rem; line-height: 1.55; }
+.az-source { margin-top: auto; padding-top: 10px; font-size: .88rem; color: var(--teal); overflow-wrap: anywhere; }
+
+/* Aides nationales (bande sombre) */
+.az-nat { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.az-nat article { padding: 22px; border: 1px solid var(--line); border-radius: 16px; background: rgba(238, 242, 240, .03); }
+.az-nat .az-type { color: var(--accent); }
+.az-nat h3 { margin: 6px 0 4px; font: 500 1.15rem var(--display); }
+.az-nat .montant { font: 400 1.05rem var(--display); color: var(--accent-soft); }
+.az-nat p { margin: 8px 0 0; color: var(--muted); font-size: .95rem; line-height: 1.55; }
+
+@media (max-width: 900px) {
+  .az-trois, .az-nat { grid-template-columns: 1fr; }
+  .qs-choix button { width: calc((100% - 10px) / 2); }
+}
+@media (max-width: 650px) {
+  body.aides { --gutter: 12px; }
+  .az-intro .chapo { margin-bottom: 32px; }
+  .qs-etapes { width: calc(100% - 60px); margin: 0 30px 36px; }
+  .qs-etape { font-size: .82rem; }
+  .qs-question { font-size: 1.3rem; }
+  .qs-choix { gap: 8px; }
+  .qs-choix button { height: 76px; padding: 0 14px; }
+  .qs-aide, .az-dispo, .az-nat article { padding: 18px 14px; }
+  .az-faq summary { padding: 18px 0; font-size: 1.04rem; }
+  .az-actions { gap: 14px 20px; }
+}
+
+/* Pied de page : reste sombre, logo clair */
+.aides footer .logo { color: #fff; }
+
+/* Ce qu'il faut savoir : vert sombre du site */
+.az-sombre .az-trois .num { color: var(--accent); }
+
+/* Questions fréquentes : blanc cassé, écriture vert sombre, accents verts */
+.az-zone-faq { background: #f7f6f0; color: #0e3b36; --text: #0e3b36; --muted: rgba(14, 59, 54, 0.78); --line: rgba(14, 59, 54, 0.2); --accent: #1a7f77; --accent-soft: #1a7f77; }
+.az-zone-faq .az-titre, .az-zone-faq .az-faq summary { color: #0e3b36; }
+.az-zone-faq .az-faq summary:hover { color: #1a7f77; }
+.az-zone-faq .az-sources a { color: #146b64; }
+
+/* Ligne fine de 1 px entre deux bandes claires voisines */
+:is(.az-claire, .az-blanche) + :is(.az-claire, .az-blanche) { border-top: 1px solid rgba(15, 28, 27, 0.1); }
+
+/* Réponse déjà donnée : repérable quand on revient sur une étape */
+.qs-choix button { position: relative; }
+
+/* Boutons du questionnaire : vert sombre éclairci au repos (#183433), plus clair encore au survol */
+.qs-choix button { background: #183433; border-color: rgba(79, 194, 186, .4); color: #eef2f0; box-shadow: 0 1px 2px rgba(15, 28, 27, .2); }
+.qs-choix button small { color: rgba(238, 242, 240, .72); }
+@media (hover: hover) {
+  .qs-choix button:hover { filter: brightness(1.35); border-color: rgba(79, 194, 186, .75); box-shadow: 0 6px 16px rgba(15, 28, 27, .2); }
+}
+.qs-choix button:focus-visible { outline: 2px solid #4fc2ba; outline-offset: 2px; filter: brightness(1.35); }
+.qs-choix button:active { filter: brightness(1.15); }

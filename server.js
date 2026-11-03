@@ -66,6 +66,9 @@ const serveur = http.createServer((req, res) => {
   catch { return envoyer(res, 400, 'Adresse invalide'); }
   if (chemin.includes('\0')) return envoyer(res, 400, 'Adresse invalide');
 
+  // L'accueil n'a qu'une adresse : /index.html redirige vers /
+  if (chemin === '/index.html') return envoyer(res, 301, '', { Location: '/' });
+
   const ancienne = chemin.match(ANCIENNES);
   if (ancienne) return envoyer(res, 301, '', { Location: `/services/${ancienne[1]}.html` });
 

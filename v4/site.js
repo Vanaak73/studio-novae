@@ -96,3 +96,31 @@
     sync();
   });
 })();
+
+// Liens d'ancre (#services, #top…) : la page défile jusqu'à la section, l'adresse reste propre (jamais de # dans l'URL)
+(function () {
+  var propre = function () { history.replaceState(null, '', location.pathname + location.search); };
+  var aller = function (id) {
+    var cible = id ? document.getElementById(id) : null;
+    if (cible) cible.scrollIntoView(); else window.scrollTo(0, 0);
+    propre();
+  };
+  // Arrivée sur une page avec une ancre (depuis une autre page) : on défile puis on nettoie l'adresse
+  if (location.hash) {
+    var id = decodeURIComponent(location.hash.slice(1));
+    window.addEventListener('load', function () { setTimeout(function () { aller(id === 'top' ? '' : id); }, 0); });
+  }
+  // Ancre saisie dans l'adresse de la page déjà ouverte
+  window.addEventListener('hashchange', function () { if (location.hash) { var h = decodeURIComponent(location.hash.slice(1)); aller(h === 'top' ? '' : h); } });
+  // Clic sur une ancre de la page courante
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href]');
+    if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+    var u;
+    try { u = new URL(a.href, location.href); } catch (x) { return; }
+    if (!u.hash || u.origin !== location.origin || u.pathname !== location.pathname) return;
+    e.preventDefault();
+    var id = decodeURIComponent(u.hash.slice(1));
+    aller(id === 'top' ? '' : id);
+  });
+})();

@@ -23,7 +23,7 @@
   <meta name="twitter:title" content="Studio Novae — Marketing digital et automatisation IA" />
   <meta name="twitter:description" content="Studio Novae conçoit des sites vitrines, outils sur mesure, boutiques en ligne et automatisations IA pour les petites entreprises." />
   <meta name="twitter:image" content="https://studionovae.org/assets/images/og/accueil.jpg" />
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Studio Novae", "url": "https://studionovae.org/", "logo": "https://studionovae.org/assets/images/og/accueil.jpg", "email": "bonjour@studionovae.org", "description": "Studio Novae conçoit des sites vitrines, outils sur mesure, boutiques en ligne et automatisations IA pour les petites entreprises."}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Studio Novae", "url": "https://studionovae.org/", "logo": "https://studionovae.org/assets/images/og/accueil.jpg", "email": "contact@studionovae.org", "description": "Studio Novae conçoit des sites vitrines, outils sur mesure, boutiques en ligne et automatisations IA pour les petites entreprises."}</script>
   <!-- /meta -->
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -33,10 +33,10 @@
 <body>
 
   <header class="site-header">
-    <a class="logo" href="#top" aria-label="Studio Novae, accueil">STUDIO <span>·</span> NOVAE</a>
+    <a class="logo" href="/" aria-label="Studio Novae, accueil">STUDIO <span>·</span> NOVAE</a>
     <nav>
       <div class="has-menu">
-        <a class="menu-trigger" href="index.html#services" aria-haspopup="true">Services</a>
+        <a class="menu-trigger" href="/#services" aria-haspopup="true">Services</a>
         <div class="submenu">
           <a href="services/site-vitrine.html">Site vitrine</a>
           <a href="services/outil-metier.html">Outil sur mesure</a>
@@ -46,10 +46,10 @@
           <a href="services/community-management.html">Community management</a>
         </div>
       </div>
-      <a href="index.html#realisations">Réalisations</a>
-      <a href="index.html#methode">Méthode</a>
+      <a href="/#realisations">Réalisations</a>
+      <a href="/#methode">Méthode</a>
       <a href="a-propos.html">À propos</a>
-      <a class="nav-contact" href="mailto:bonjour@studionovae.org">Discutons <span>↗</span></a>
+      <a class="nav-contact" href="mailto:contact@studionovae.org">Nous contacter</a>
     </nav>
   </header>
 
@@ -112,30 +112,17 @@
       </div>
     </section>
 
-    <section class="realisations" id="realisations">
-      <div class="section-heading">
-        <p class="eyebrow">Réalisations</p>
-        <h2>Des projets déjà en ligne.</h2>
+    <section class="aides-accueil" id="aides">
+      <div class="aides-texte">
+          <p class="eyebrow">Aides à la création de site web</p>
+          <h2>Des aides publiques pour financer <em>votre site web.</em></h2>
+          <p>L'État, les régions et les collectivités soutiennent le numérique des entreprises. Leur nom et leur montant changent d'un territoire à l'autre : trois questions suffisent pour trouver celles de votre région.</p>
+          <div class="aides-boutons">
+          <a class="bouton-aides" href="/aide-creation-site-web/">Trouver les aides de ma région</a>
+          <button type="button" class="bouton-aides bouton-aides-sec">Demander Conseil</button>
+        </div>
       </div>
-      <div class="project-track" data-glisser tabindex="0" role="region" aria-label="Réalisations">
-        <a class="project" href="https://producteurslocaux.org" target="_blank" rel="noopener" draggable="false">
-          <div class="project-image" style="background-image:url('../assets/images/realisations/logo-producteurslocaux.jpg')"></div>
-          <div class="project-meta"><span>Producteurs Locaux</span><span>Annuaire et carte du circuit court · France</span></div>
-        </a>
-        <a class="project" href="https://fairynailart.fr" target="_blank" rel="noopener" draggable="false">
-          <div class="project-image" style="background-image:url('../assets/images/realisations/logo-fairynailart.jpg')"></div>
-          <div class="project-meta"><span>Fairy Nail Art</span><span>Prothésiste ongulaire · Chambéry</span></div>
-        </a>
-        <a class="project" href="https://khrua-siam.fr" target="_blank" rel="noopener" draggable="false">
-          <div class="project-image" style="background-image:url('../assets/images/realisations/logo-khrua-siam.jpg')"></div>
-          <div class="project-meta"><span>Khrua Siam</span><span>Traiteur thaïlandais · Chambéry</span></div>
-        </a>
-        <a class="project" href="https://roofmonkeys.fr" target="_blank" rel="noopener" draggable="false">
-          <div class="project-image" style="background-image:url('../assets/images/realisations/logo-roofmonkeys.jpg')"></div>
-          <div class="project-meta"><span>Roof Monkeys</span><span>Couvreur-zingueur · Morlaix</span></div>
-        </a>
-      </div>
-      <div class="dots" aria-hidden="true"></div>
+      <img class="aides-photo" src="/assets/images/aides-echange.jpg" width="1200" height="800" alt="Deux personnes échangent autour d'une table de travail" loading="lazy" />
     </section>
 
     <section class="methode" id="methode">
@@ -164,16 +151,42 @@
       </div>
     </section>
 
+    <section class="realisations" id="realisations">
+      <div class="section-heading">
+        <p class="eyebrow">Réalisations</p>
+        <h2>Des projets déjà en ligne.</h2>
+      </div>
+      <div class="project-track" data-glisser tabindex="0" role="region" aria-label="Réalisations">
+        <a class="project" href="https://producteurslocaux.org" target="_blank" rel="noopener" draggable="false">
+          <div class="project-image" style="background-image:url('../assets/images/realisations/logo-producteurslocaux.jpg')"></div>
+          <div class="project-meta"><span>Producteurs Locaux</span><span>Annuaire et carte du circuit court · France</span></div>
+        </a>
+        <a class="project" href="https://fairynailart.fr" target="_blank" rel="noopener" draggable="false">
+          <div class="project-image" style="background-image:url('../assets/images/realisations/logo-fairynailart.jpg')"></div>
+          <div class="project-meta"><span>Fairy Nail Art</span><span>Prothésiste ongulaire · Chambéry</span></div>
+        </a>
+        <a class="project" href="https://khrua-siam.fr" target="_blank" rel="noopener" draggable="false">
+          <div class="project-image" style="background-image:url('../assets/images/realisations/logo-khrua-siam.jpg')"></div>
+          <div class="project-meta"><span>Khrua Siam</span><span>Traiteur thaïlandais · Chambéry</span></div>
+        </a>
+        <a class="project" href="https://roofmonkeys.fr" target="_blank" rel="noopener" draggable="false">
+          <div class="project-image" style="background-image:url('../assets/images/realisations/logo-roofmonkeys.jpg')"></div>
+          <div class="project-meta"><span>Roof Monkeys</span><span>Couvreur-zingueur · Morlaix</span></div>
+        </a>
+      </div>
+      <div class="dots" aria-hidden="true"></div>
+    </section>
+
     <section class="contact" id="contact">
       <p class="eyebrow">Un projet en tête ?</p>
       <h2>Écrivons la<br /><em>suite.</em></h2>
-      <a class="contact-link" href="mailto:bonjour@studionovae.org">bonjour@studionovae.org <span>↗</span></a>
+      <a class="contact-link" href="mailto:contact@studionovae.org">contact@studionovae.org</a>
     </section>
   </main>
 
   <footer>
     <div>
-      <a class="logo" href="index.html">STUDIO <span>·</span> NOVAE</a>
+      <a class="logo" href="/">STUDIO <span>·</span> NOVAE</a>
       <p>Développement web et automatisation IA, depuis la France.</p>
     </div>
     <div class="footer-links">
@@ -184,7 +197,8 @@
       <a href="services/video-ugc.html">Vidéo UGC (promotion)</a>
       <a href="services/community-management.html">Community management</a>
       <a href="a-propos.html">À propos</a>
-      <a href="mailto:bonjour@studionovae.org">Contact</a>
+      <a href="/aide-creation-site-web/">Aides à la création de site</a>
+      <a href="mailto:contact@studionovae.org">Contact</a>
     </div>
     <div class="footer-copy"><span>© 2026 Studio Novae</span><a href="#top">Retour en haut ↑</a></div>
   </footer>
