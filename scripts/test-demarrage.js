@@ -1,6 +1,6 @@
-// Test de démarrage rapide, comme en production : construit dist/, démarre server.js, vérifie les adresses clés, puis arrête et nettoie.
+// Test de démarrage rapide, comme en production : démarre server.js, vérifie les adresses clés (pages, fichiers, redirections), puis l'arrête.
 //   node scripts/test-demarrage.js
-const { spawn, execFileSync } = require('child_process');
+const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const RACINE = path.join(__dirname, '..');
@@ -9,7 +9,6 @@ const BASE = `http://localhost:${PORT}`;
 const att = (ms) => new Promise((r) => setTimeout(r, ms));
 
 (async () => {
-  execFileSync(process.execPath, ['build.js'], { cwd: RACINE, stdio: 'inherit' });
   const serveur = spawn(process.execPath, ['server.js'], { cwd: RACINE, env: { ...process.env, PORT: String(PORT), NOINDEX: '0' }, stdio: 'ignore' });
   let echecs = 0;
   const ok = (nom, cond, detail = '') => { if (!cond) echecs++; console.log(`${cond ? '✓' : '✗ ÉCHEC'}  ${nom}${detail ? '  → ' + detail : ''}`); };
@@ -21,6 +20,11 @@ const att = (ms) => new Promise((r) => setTimeout(r, ms));
       const r = await get(u); ok(`${u} répond 200`, r.statut === 200, r.statut);
     }
     ok('/index.html redirige vers /', (await get('/index.html')).statut === 301);
+    const hote = async (h, u) => { const r = await fetch(BASE + u, { redirect: 'manual', headers: { 'x-forwarded-host': h } }); return { statut: r.status, lieu: r.headers.get('location') }; };
+    const www = await hote('www.studionovae.org', '/a-propos.html?x=1');
+    ok('www.studionovae.org redirige (301) vers studionovae.org', www.statut === 301 && www.lieu === 'https://studionovae.org/a-propos.html?x=1', www.lieu);
+    ok('studionovae.org ne redirige pas', (await hote('studionovae.org', '/')).statut === 200);
+    ok('le code source (src/) n\'est pas servi', (await get('/src/rendu.js')).statut === 404 && (await get('/assets/../src/rendu.js')).statut !== 200);
     ok('/style.css (ancien chemin) absent', (await get('/style.css')).statut === 404);
     ok('/assets/../server.js refusé', (await get('/assets/../server.js')).statut !== 200);
     const accueil = (await get('/')).texte, css = (await get('/assets/css/style.css')).texte, js = (await get('/assets/js/site.js')).texte, hub = (await get('/aide-creation-site-web/')).texte;
@@ -30,7 +34,7 @@ const att = (ms) => new Promise((r) => setTimeout(r, ms));
     ok('style.css : états de l\'en-tête (cache, plein)', css.includes('.site-header.cache') && css.includes('.site-header.plein'));
     ok('hub : feuilles de style et scripts en /assets/', hub.includes('/assets/css/aides.css') && hub.includes('/assets/js/aides.js') && !hub.includes('href="/style.css"'));
     ok('adresse contact@studionovae.org partout, jamais bonjour@', accueil.includes('contact@studionovae.org') && !accueil.includes('bonjour@') && !hub.includes('bonjour@'));
-  } finally { serveur.kill(); fs.rmSync(path.join(RACINE, 'dist'), { recursive: true, force: true }); }
+  } finally { serveur.kill(); }
   console.log(echecs ? `\n✗ ${echecs} échec(s) : NE PAS POUSSER` : '\n✓ le site démarre et sert tout correctement depuis la nouvelle structure');
   process.exit(echecs ? 1 : 0);
 })().catch((e) => { console.error('Le test a planté :', e.message); process.exit(2); });

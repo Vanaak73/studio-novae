@@ -2,14 +2,15 @@
   "name": "studio-novae",
   "version": "1.0.0",
   "private": true,
-  "description": "Site Studio Novae servi par Node, sans dépendance",
+  "description": "Site Studio Novae : pages générées par Node, sans dépendance",
   "main": "server.js",
   "scripts": {
-    "build": "node build.js",
     "start": "node server.js",
+    "build": "node -e \"console.log('Rien à construire : les pages sont générées au démarrage')\"",
+    "test": "node scripts/test-rendu.js",
+    "test:demarrage": "node scripts/test-demarrage.js",
     "controle": "node scripts/controle-site.js",
-    "controle:prod": "node scripts/controle-site.js --prod",
-    "test:demarrage": "node scripts/test-demarrage.js"
+    "controle:prod": "node scripts/controle-site.js --prod"
   },
   "engines": {
     "node": ">=20"

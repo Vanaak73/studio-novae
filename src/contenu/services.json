@@ -1,0 +1,216 @@
+{
+ "automatisation-ia": {
+  "titre": "Automatisation & IA — Studio Novae",
+  "description": "Des automatisations et des assistants IA qui prennent en charge vos tâches répétitives, sur un serveur dédié à votre entreprise.",
+  "og": "automatisation-ia.jpg",
+  "img": "/assets/images/automatisation-datacenter.jpg",
+  "pill": "Automatisation & IA",
+  "h1": "Des tâches qui se font<br /><em>toutes seules.</em>",
+  "intro": "Vos outils travaillent ensemble et des assistants IA vous épaulent, pour que votre temps aille à ce qui compte vraiment.",
+  "sections": [
+   {
+    "eyebrow": "Volet 1",
+    "h2": "Vos outils enfin connectés entre eux.",
+    "corps": "<div class=\"two-col\">\n        <p>Une automatisation, c'est une consigne que l'on donne une seule fois : « quand ceci arrive, fais cela ». Un client remplit un formulaire, sa fiche se crée, un message de bienvenue part, votre équipe est prévenue.</p>\n        <p>Nous mettons en place ces enchaînements avec <strong>n8n</strong>, un chef d'orchestre qui fait dialoguer vos applications. Il tourne sur <strong>un serveur dédié à votre entreprise</strong> : vos données restent chez vous et le fonctionnement reste sous votre contrôle.</p>\n      </div>\n      <div class=\"card-grid\">\n        <div class=\"card\"><h3>Courriers et relances</h3><p>Mailings, relances de devis ou de factures, messages de suivi envoyés au bon moment.</p></div>\n        <div class=\"card\"><h3>Saisie et tri</h3><p>Les informations circulent d'un outil à l'autre sans copier-coller.</p></div>\n        <div class=\"card\"><h3>Visibilité sur Google</h3><p>Suivi de votre référencement et de vos statistiques grâce aux outils de Google.</p></div>\n        <div class=\"card\"><h3>Contenus et vidéos par IA</h3><p>Création d'images, de textes et de vidéos assistée par l'intelligence artificielle.</p></div>\n      </div>"
+   },
+   {
+    "classe": "page-section-soft",
+    "eyebrow": "Volet 2",
+    "h2": "Des assistants IA qui connaissent votre entreprise.",
+    "corps": "<div class=\"two-col\">\n        <p>Un assistant IA devient vraiment utile lorsqu'il connaît votre activité. Nous créons pour cela une <strong>mémoire centrale</strong> : un espace où sont rassemblés vos informations, vos façons de faire et vos documents.</p>\n        <p>Vos assistants, basés sur <strong>Claude</strong> (Anthropic), y puisent chaque fois qu'ils travaillent. Reliés à vos outils par des <strong>connecteurs</strong>, ils peuvent répondre, trier, résumer et préparer des actions, avec toujours les mêmes références.</p>\n      </div>"
+   },
+   {
+    "voirAussi": true,
+    "classe": "page-section",
+    "eyebrow": "À découvrir aussi",
+    "h2": "Les autres façons de travailler ensemble."
+   },
+   {
+    "cta": {
+     "eyebrow": "Du temps à récupérer ?",
+     "h2": "Dites-nous ce qui <em>vous pèse.</em>"
+    }
+   }
+  ],
+  "nomSchema": "Automatisation et IA"
+ },
+ "boutique-en-ligne": {
+  "titre": "Boutique en ligne — Studio Novae",
+  "description": "Une boutique en ligne à votre image : catalogue, panier, paiement sécurisé et gestion simple de vos commandes.",
+  "og": "boutique-en-ligne.jpg",
+  "img": "/assets/images/lumiere-architecture.jpg",
+  "pos": "0%",
+  "pill": "Boutique en ligne (e-commerce)",
+  "h1": "Vendez en ligne,<br /><em>à votre façon.</em>",
+  "intro": "Une boutique à votre image, où vos clients commandent facilement et où vous gérez tout depuis un seul endroit.",
+  "sections": [
+   {
+    "eyebrow": "Ce que comprend votre boutique",
+    "h2": "Tout pour vendre, de la vitrine à l'encaissement.",
+    "corps": "<div class=\"card-grid\">\n        <div class=\"card\"><h3>Un catalogue soigné</h3><p>Vos produits avec photos, descriptions, déclinaisons et prix, faciles à parcourir.</p></div>\n        <div class=\"card\"><h3>Un parcours d'achat fluide</h3><p>Panier, commande et paiement en quelques étapes, sur téléphone comme sur ordinateur.</p></div>\n        <div class=\"card\"><h3>Paiement sécurisé</h3><p>Carte bancaire et autres moyens de paiement reconnus, avec des transactions protégées.</p></div>\n        <div class=\"card\"><h3>Gestion des commandes</h3><p>Suivi de chaque commande, du paiement à l'expédition, depuis votre espace d'administration.</p></div>\n        <div class=\"card\"><h3>E-mails automatiques</h3><p>Confirmation de commande, suivi de livraison : vos clients sont informés sans que vous y pensiez.</p></div>\n        <div class=\"card\"><h3>Livraison ou retrait</h3><p>Vos modes de livraison et vos tarifs, configurés selon votre organisation.</p></div>\n      </div>"
+   },
+   {
+    "classe": "page-section-soft",
+    "eyebrow": "Au quotidien",
+    "h2": "Une boutique que vous maîtrisez.",
+    "corps": "<div class=\"two-col\">\n        <p>Ajouter un produit, modifier un prix, lancer une promotion ou suivre vos ventes : votre espace d'administration est conçu pour être pris en main dès le premier jour.</p>\n        <p>Votre boutique évolue avec vous. Nouvelles fonctionnalités, nouveaux modes de vente, liens avec vos autres outils : chaque ajout se construit sur des bases déjà en place.</p>\n      </div>"
+   },
+   {
+    "voirAussi": true,
+    "classe": "page-section",
+    "eyebrow": "À découvrir aussi",
+    "h2": "Les autres façons de travailler ensemble."
+   },
+   {
+    "cta": {
+     "eyebrow": "Une boutique à lancer ?",
+     "h2": "Ouvrons <em>vos portes.</em>"
+    }
+   }
+  ],
+  "nomSchema": "Boutique en ligne"
+ },
+ "community-management": {
+  "titre": "Community management — Studio Novae",
+  "description": "Une présence régulière et soignée sur vos réseaux, assurée par une professionnelle qui anime vos comptes à votre place.",
+  "og": "community-management.jpg",
+  "img": "/assets/images/reseaux-sociaux-telephone.jpg",
+  "pos": "20%",
+  "pill": "Community management",
+  "h1": "Des réseaux sociaux<br /><em>qui vivent.</em>",
+  "intro": "Une présence régulière et soignée sur vos réseaux, assurée par une professionnelle qui anime vos comptes à votre place.",
+  "sections": [
+   {
+    "eyebrow": "En clair",
+    "h2": "Une présence régulière, sans y passer vos soirées.",
+    "corps": "<div class=\"two-col\">\n        <p>Le community management consiste à animer vos comptes : publier, répondre aux messages et aux commentaires, et faire vivre votre communauté dans le ton de votre entreprise.</p>\n        <p>Ce service est assuré par ma sœur, community manager indépendante. Studio Novae fait le lien : décrivez votre besoin ci-dessous, elle vous recontacte directement.</p>\n      </div>"
+   },
+   {
+    "classe": "page-section-soft",
+    "eyebrow": "Au programme",
+    "h2": "Ce qui est proposé.",
+    "corps": "<div class=\"card-grid\"><div class=\"card\"><h3>Publications</h3><p>Un calendrier de contenus régulier, à votre image.</p></div><div class=\"card\"><h3>Échanges</h3><p>Réponses aux messages et commentaires de votre communauté.</p></div><div class=\"card\"><h3>Suivi</h3><p>Un point régulier sur ce qui fonctionne et ce qui s'améliore.</p></div></div>"
+   },
+   {
+    "id": "demande",
+    "eyebrow": "Votre projet réseaux",
+    "h2": "Dites-nous ce dont vous avez besoin.",
+    "corps": "<form class=\"contact-form\" action=\"mailto:contact@studionovae.org?subject=Community%20management\" method=\"post\" enctype=\"text/plain\">\n        <label>Votre nom<input type=\"text\" name=\"nom\" required autocomplete=\"name\" /></label>\n        <label>Votre e-mail<input type=\"email\" name=\"email\" required autocomplete=\"email\" /></label>\n        <label>Votre projet<textarea name=\"message\" rows=\"5\" required></textarea></label>\n        <button type=\"submit\">Envoyer ma demande</button>\n        <p class=\"form-note\">Votre demande est transmise à ma sœur, qui vous répond directement.</p>\n      </form>"
+   },
+   {
+    "voirAussi": true,
+    "classe": "page-section page-section-soft",
+    "eyebrow": "À découvrir aussi",
+    "h2": "Les autres façons de travailler ensemble."
+   }
+  ],
+  "nomSchema": "Community management"
+ },
+ "outil-metier": {
+  "titre": "Outil sur mesure — Studio Novae",
+  "description": "Un espace de travail privé en ligne, conçu pour votre métier et accessible à votre équipe avec ses identifiants.",
+  "og": "outil-metier.jpg",
+  "img": "/assets/images/ville-skyline-crepuscule.jpg",
+  "pos": "35%",
+  "pill": "Outil sur mesure",
+  "h1": "Un espace de travail<br /><em>rien qu'à vous.</em>",
+  "intro": "Une application privée, pensée pour votre métier, où votre équipe retrouve au même endroit tout ce qui était éparpillé.",
+  "sections": [
+   {
+    "eyebrow": "En clair",
+    "h2": "Un outil construit autour de votre façon de travailler.",
+    "corps": "<div class=\"two-col\">\n        <p>Tableurs, carnets, e-mails, logiciels qui ne se parlent pas : le travail quotidien se disperse. Un outil sur mesure rassemble tout dans un espace en ligne unique, que vous et votre équipe ouvrez avec vos identifiants personnels.</p>\n        <p>Chaque écran correspond à vos habitudes et à votre vocabulaire. Chacun voit ce qui le concerne, avec des droits d'accès adaptés au rôle de chaque personne.</p>\n      </div>"
+   },
+   {
+    "classe": "page-section-soft",
+    "eyebrow": "Exemples",
+    "h2": "Ce que cela peut devenir chez vous.",
+    "corps": "<div class=\"card-grid\">\n        <div class=\"card\"><h3>Suivi de clients</h3><p>Fiches, historique des échanges, rappels et relances au même endroit.</p></div>\n        <div class=\"card\"><h3>Planning et interventions</h3><p>Qui fait quoi, quand et où, consultable depuis le téléphone sur le terrain.</p></div>\n        <div class=\"card\"><h3>Devis et facturation</h3><p>Des documents prêts en quelques clics, avec votre mise en forme.</p></div>\n        <div class=\"card\"><h3>Stock et commandes</h3><p>Un inventaire à jour et des alertes quand un produit se fait rare.</p></div>\n        <div class=\"card\"><h3>Espace client</h3><p>Vos clients consultent leurs dossiers et documents avec leur propre accès.</p></div>\n        <div class=\"card\"><h3>Votre idée</h3><p>Chaque métier a ses spécificités : parlons de la vôtre.</p></div>\n      </div>"
+   },
+   {
+    "voirAussi": true,
+    "classe": "page-section",
+    "eyebrow": "À découvrir aussi",
+    "h2": "Les autres façons de travailler ensemble."
+   },
+   {
+    "cta": {
+     "eyebrow": "Un outil à imaginer ?",
+     "h2": "Racontez-nous <em>votre quotidien.</em>"
+    }
+   }
+  ],
+  "nomSchema": "Outil sur mesure"
+ },
+ "site-vitrine": {
+  "titre": "Site vitrine — Studio Novae",
+  "description": "Un site vitrine clair, rapide et agréable sur mobile, avec en option un espace d'administration pour le modifier vous-même.",
+  "og": "site-vitrine.jpg",
+  "img": "/assets/images/eau-mouvement.jpg",
+  "pos": "60%",
+  "pill": "Site vitrine",
+  "h1": "Votre site, prêt à<br /><em>accueillir vos clients.</em>",
+  "intro": "Une vitrine claire, rapide et belle sur téléphone, qui présente votre activité et donne envie de vous contacter.",
+  "sections": [
+   {
+    "eyebrow": "Deux formules",
+    "h2": "Choisissez le niveau d'autonomie qui vous convient.",
+    "corps": "<div class=\"tiers\">\n        <article class=\"tier\">\n          <span class=\"tier-label\">Formule 1</span>\n          <h3>Essentiel</h3>\n          <p>Un site soigné qui présente votre activité, vos coordonnées et vos atouts. Nous nous occupons de tout : textes, mise en page, mise en ligne.</p>\n          <ul>\n            <li>Quelques pages : accueil, présentation, contact</li>\n            <li>Affichage parfait sur téléphone, tablette et ordinateur</li>\n            <li>Chargement rapide</li>\n            <li>Réglages de base pour être trouvé sur Google</li>\n            <li>Mise en ligne avec votre nom de domaine</li>\n          </ul>\n        </article>\n        <article class=\"tier tier-featured\">\n          <span class=\"tier-label\">Formule 2</span>\n          <h3>Autonome</h3>\n          <p>Tout l'Essentiel, avec un espace d'administration simple pour faire vivre votre site vous-même, à votre rythme.</p>\n          <ul>\n            <li>Modification des textes et des photos en quelques clics</li>\n            <li>Publication d'actualités, d'offres ou de nouveautés</li>\n            <li>Une prise en main guidée, sans aucune connaissance technique</li>\n            <li>Un site qui évolue avec votre activité</li>\n          </ul>\n        </article>\n      </div>"
+   },
+   {
+    "classe": "page-section-soft",
+    "eyebrow": "Comment ça se passe",
+    "h2": "De la première conversation à la mise en ligne.",
+    "corps": "<div class=\"steps\">\n        <div class=\"step\"><span>01</span><h3>On échange</h3><p>Vous racontez votre activité, vos clients et ce que le site doit leur apporter.</p></div>\n        <div class=\"step\"><span>02</span><h3>On construit</h3><p>Vous suivez l'avancée et donnez votre avis avant la version finale.</p></div>\n        <div class=\"step\"><span>03</span><h3>On met en ligne</h3><p>Le site est publié, vérifié, et vous savez exactement comment il fonctionne.</p></div>\n      </div>"
+   },
+   {
+    "voirAussi": true,
+    "classe": "page-section",
+    "eyebrow": "À découvrir aussi",
+    "h2": "Les autres façons de travailler ensemble."
+   },
+   {
+    "cta": {
+     "eyebrow": "Un site à créer ?",
+     "h2": "Parlons de <em>votre vitrine.</em>"
+    }
+   }
+  ],
+  "nomSchema": "Site vitrine"
+ },
+ "video-ugc": {
+  "titre": "Vidéo UGC pour votre promotion — Studio Novae",
+  "description": "Vidéo UGC (contenu généré par les utilisateurs) : des vidéos spontanées, façon avis client, pour promouvoir votre marque sur les réseaux sociaux et en publicité.",
+  "og": "video-ugc.jpg",
+  "img": "/assets/images/ugc-telephone-trepied-cafe.jpg",
+  "pill": "Vidéo UGC (promotion)",
+  "h1": "Le bouche-à-oreille,<br /><em>en vidéo.</em>",
+  "intro": "Des vidéos tournées comme par un vrai client qui recommande votre produit : c'est le principe de la vidéo UGC, pour vos réseaux sociaux et vos publicités.",
+  "sections": [
+   {
+    "eyebrow": "En clair",
+    "h2": "Qu'est-ce qu'une vidéo UGC ?",
+    "corps": "<div class=\"two-col\">\n        <p>UGC signifie « user generated content », soit « contenu généré par les utilisateurs ». Une vidéo UGC est une vidéo courte et spontanée, filmée comme par un client ou un utilisateur qui présente, essaie ou recommande un produit. Elle ressemble à un avis client plutôt qu'à une publicité : c'est ce qui inspire confiance.</p>\n        <p>Les marques et les commerces s'en servent pour leur promotion : publications sur les réseaux sociaux, publicités en ligne, fiches produit, boutique en ligne. Ce service est réalisé par ma sœur, créatrice indépendante. Studio Novae fait le lien : décrivez votre besoin ci-dessous, elle vous recontacte directement.</p>\n      </div>"
+   },
+   {
+    "classe": "page-section-soft",
+    "eyebrow": "Au programme",
+    "h2": "Ce qui est proposé.",
+    "corps": "<div class=\"card-grid\"><div class=\"card\"><h3>Vidéos produit</h3><p>Présentation, déballage ou essai de vos produits, filmés avec naturel.</p></div><div class=\"card\"><h3>Témoignages</h3><p>Des avis clients ou des retours d'expérience racontés simplement.</p></div><div class=\"card\"><h3>Formats publicitaires</h3><p>Des vidéos pensées pour vos campagnes et vos réseaux sociaux.</p></div></div>"
+   },
+   {
+    "id": "demande",
+    "eyebrow": "Votre projet vidéo",
+    "h2": "Dites-nous ce dont vous avez besoin.",
+    "corps": "<form class=\"contact-form\" action=\"mailto:contact@studionovae.org?subject=Vidéo%20UGC\" method=\"post\" enctype=\"text/plain\">\n        <label>Votre nom<input type=\"text\" name=\"nom\" required autocomplete=\"name\" /></label>\n        <label>Votre e-mail<input type=\"email\" name=\"email\" required autocomplete=\"email\" /></label>\n        <label>Votre projet<textarea name=\"message\" rows=\"5\" required></textarea></label>\n        <button type=\"submit\">Envoyer ma demande</button>\n        <p class=\"form-note\">Votre demande est transmise à ma sœur, qui vous répond directement.</p>\n      </form>"
+   },
+   {
+    "voirAussi": true,
+    "classe": "page-section page-section-soft",
+    "eyebrow": "À découvrir aussi",
+    "h2": "Les autres façons de travailler ensemble."
+   }
+  ],
+  "nomSchema": "Vidéo UGC"
+ }
+}

@@ -1,0 +1,45 @@
+{
+  "h1": "Votre site, prêt à accueillir vos clients",
+  "chapo": "Une vitrine claire, rapide et belle sur téléphone, qui présente votre activité et donne envie de vous contacter.",
+  "blocs": [
+    {
+      "type": "formules",
+      "h2": "Deux formules, selon votre autonomie",
+      "items": [
+        {
+          "h3": "Essentiel",
+          "p": "Un site soigné qui présente votre activité, vos coordonnées et vos atouts. Textes, mise en page et mise en ligne sont pris en charge.",
+          "liste": [
+            "Quelques pages : accueil, présentation, contact",
+            "Affichage parfait sur téléphone, tablette et ordinateur",
+            "Chargement rapide",
+            "Réglages de base pour être trouvé sur Google",
+            "Mise en ligne avec votre nom de domaine"
+          ]
+        },
+        {
+          "h3": "Autonome",
+          "phare": true,
+          "p": "Tout l'Essentiel, avec un espace d'administration simple pour faire vivre votre site à votre rythme.",
+          "liste": [
+            "Modification des textes et des photos en quelques clics",
+            "Publication d'actualités, d'offres ou de nouveautés",
+            "Une prise en main guidée, accessible à tous",
+            "Un site qui évolue avec votre activité"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "etapes",
+      "h2": "De la première conversation à la mise en ligne",
+      "items": [
+        { "h3": "On échange", "p": "Vous racontez votre activité, vos clients et ce que le site doit leur apporter." },
+        { "h3": "On construit", "p": "Vous suivez l'avancée et donnez votre avis avant la version finale." },
+        { "h3": "On met en ligne", "p": "Le site est publié, vérifié, et vous savez exactement comment il fonctionne." }
+      ]
+    },
+    { "type": "puces", "h2": "Les autres façons de travailler ensemble" }
+  ],
+  "appel": "Parlons de votre vitrine."
+}

@@ -38,7 +38,9 @@
       var y = window.scrollY;
       var finAccueil = accueil ? accueil.offsetTop + accueil.offsetHeight : 0;
       if (y <= Math.max(0, finAccueil - entete.offsetHeight)) {
-        entete.classList.remove("cache", "plein");
+        // Sur l'image d'accueil : l'en-tête reste visible, avec son fond bleu nuit translucide dès le premier défilement
+        entete.classList.remove("cache");
+        entete.classList.toggle("plein", y > 2);
       } else if (y < dernier - 2) {
         entete.classList.remove("cache");
         entete.classList.add("plein");
@@ -59,7 +61,8 @@
       dernier = y;
       var finAccueil = accueil ? accueil.offsetTop + accueil.offsetHeight : 0;
       if (y <= Math.max(0, finAccueil - entete.offsetHeight)) {
-        entete.classList.remove("cache", "plein");
+        entete.classList.remove("cache");
+        entete.classList.toggle("plein", y > 2);
       } else {
         entete.classList.remove("cache");
         entete.classList.add("plein");
@@ -87,6 +90,9 @@
     window.addEventListener("resize", planifierRelais);
     window.addEventListener("load", planifierRelais);
     majRelais();
+  } else if (boutonEntete && document.body.classList.contains("page-service")) {
+    // Pages de service : le bouton de l'en-tête est toujours visible (celui du héros reste en plus)
+    document.documentElement.classList.add("devis-haut");
   }
 
   // Parallaxe de l'image d'en-tête

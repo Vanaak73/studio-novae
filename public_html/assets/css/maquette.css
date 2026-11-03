@@ -1,0 +1,174 @@
+/* Copie de la maquette bleu nuit (.superpowers/maquettes/design-site-v2-bleu-nuit) : accueil et pages de service.
+   Tout est limité à .mq ; l'en-tête, le pied de page et le héros de l'accueil restent dans style.css. */
+
+.mq {
+  --nuit: #0a1230;
+  --brume: #eef1f9;
+  --blanc: #ffffff;
+  --encre: #0b1330;
+  --gris: #4a5576;
+  --trait: #d5dbec;
+  --turquoise: #6c9bff;
+  --turquoise-texte: #2447c4;
+  --mauve: #9b7bff;
+  --mauve-texte: #5b3fc9;
+  --titre: 'Space Grotesk', system-ui, sans-serif;
+  --texte: 'Manrope', system-ui, sans-serif;
+  --g: clamp(12px, 5vw, 56px);
+  --pad-section: clamp(56px, 8vw, 112px);
+  --rayon: 14px;
+  font-family: var(--texte);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--encre);
+  background: var(--brume);
+  -webkit-font-smoothing: antialiased;
+}
+.mq * { box-sizing: border-box; } /* comme la maquette : les pseudo-éléments (::before) gardent le modèle par défaut */
+.mq img { display: block; max-width: 100%; }
+.mq a { color: inherit; }
+.mq :focus-visible { outline: 3px solid var(--turquoise); outline-offset: 3px; border-radius: 4px; }
+.mq .c { max-width: 1200px; margin: 0 auto; padding: 0 var(--g); }
+
+/* Échelle typographique */
+.mq h2, .mq h3 { font-family: var(--titre); margin: 0; letter-spacing: -0.02em; }
+.mq h2 { font-size: clamp(1.85rem, 3.3vw, 2.7rem); line-height: 1.12; font-weight: 500; }
+.mq h3 { font-size: 1.3rem; line-height: 1.25; font-weight: 500; letter-spacing: -0.01em; }
+.mq p { margin: 0; }
+.mq .chapo { font-size: 1.2rem; line-height: 1.55; color: var(--gris); max-width: 58ch; }
+.mq .sombre .chapo { color: rgba(255, 255, 255, .88); }
+.mq .lien { color: var(--turquoise-texte); font-weight: 600; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.mq .sombre .lien { color: var(--turquoise); }
+.mq .lien:hover { text-decoration-thickness: 2px; }
+
+/* Boutons : un seul bouton plein par écran */
+.mq .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 28px; border-radius: 999px; font: 700 1rem var(--texte); text-decoration: none; border: 2px solid transparent; cursor: pointer; transition: background .2s, border-color .2s, color .2s; }
+.mq .btn-devis { background: #a8dc5a; color: #16260a !important; opacity: 1; }
+.mq .btn-devis:hover { background: #c4ec84; transform: none; }
+.mq .btn-contour { border-color: var(--encre); color: var(--encre); background: transparent; }
+.mq .btn-contour:hover { background: var(--encre); color: #fff; }
+.mq .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 26px; margin-top: 34px; }
+
+/* « Voir les services » : en haut de la section suivante, sous la colonne du bouton « Demander un devis » */
+.mq .lien-offres { width: 192px; margin: calc(14px - var(--pad-section)) var(--gutter) calc(var(--pad-section) - 14px) auto; text-align: center; font: 400 .95rem var(--titre); position: relative; }
+.mq .lien-offres a { color: var(--encre); text-decoration: none; }
+.mq .lien-offres span { color: var(--turquoise-texte); font-size: 1.2rem; margin-left: 12px; }
+.mq .lien-offres a:hover { color: var(--turquoise-texte); }
+
+/* Sections */
+.mq .section { padding: var(--pad-section) 0; }
+.mq .section.blanc { background: var(--blanc); }
+.mq .section.sombre { background: var(--nuit); color: #fff; }
+.mq .tete-section { display: grid; gap: 14px; margin-bottom: clamp(28px, 4vw, 48px); max-width: 62ch; }
+.mq .tete-section .chapo { max-width: 56ch; }
+
+/* Services : six tuiles à égalité */
+.mq .zone-tuiles { padding: 0 var(--gutter); }
+.mq .tuiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.6vw; }
+.mq .tuile { position: relative; display: flex; align-items: flex-end; aspect-ratio: 16 / 8.2; border-radius: var(--rayon); overflow: hidden; color: #fff; text-decoration: none; background: var(--nuit) center/cover no-repeat; isolation: isolate; }
+.mq .tuile::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, rgba(7, 12, 36, .78) 0%, rgba(7, 12, 36, .28) 48%, rgba(7, 12, 36, 0) 75%); }
+.mq .tuile div { padding: clamp(16px, 2.4vw, 28px); text-shadow: 0 1px 12px rgba(0, 0, 0, .4); }
+.mq .tuile h3 { font-size: clamp(1.35rem, 2.2vw, 1.75rem); font-weight: 400; }
+.mq .tuile p { margin-top: 6px; font-size: .98rem; line-height: 1.5; max-width: 44ch; color: rgba(255, 255, 255, .92); }
+.mq .tuile:hover h3, .mq .tuile:focus-visible h3 { font-weight: 700; color: #cddbff; }
+.mq .tuile { transition: box-shadow .25s; }
+.mq .tuile:hover { box-shadow: inset 0 -4px 0 var(--mauve); }
+
+/* Méthode : une vraie suite d'étapes */
+.mq .etapes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; position: relative; counter-reset: e; }
+.mq .etapes::before { content: ""; position: absolute; left: 18px; right: 0; top: 18px; height: 1px; background: var(--trait); }
+.mq .etape { position: relative; counter-increment: e; }
+.mq .etape::before { content: counter(e); position: relative; display: grid; place-items: center; width: 37px; height: 37px; border-radius: 50%; background: var(--blanc); border: 1px solid var(--mauve-texte); color: var(--mauve-texte); font: 500 1rem var(--titre); }
+.mq .etape h3 { margin: 18px 0 8px; }
+.mq .etape p { color: var(--gris); font-size: 1rem; line-height: 1.6; max-width: 30ch; }
+
+/* Aides */
+.mq .aides { display: grid; grid-template-columns: 1.1fr .9fr; background: var(--blanc); border: 1px solid var(--trait); border-radius: 18px; overflow: hidden; }
+.mq .aides .texte { padding: clamp(24px, 4vw, 52px); display: grid; gap: 18px; align-content: center; }
+.mq .aides img { width: 100%; height: 100%; min-height: 280px; object-fit: cover; }
+
+/* Réalisations */
+.mq .projets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.mq .projet { text-decoration: none; display: block; }
+.mq .projet img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--rayon); border: 1px solid var(--trait); }
+.mq .projet strong { display: block; margin-top: 12px; font: 500 1.1rem var(--titre); }
+.mq .projet span { font-size: .93rem; color: var(--gris); }
+.mq .projet:hover strong { color: var(--turquoise-texte); }
+
+/* Appel final */
+.mq .appel { display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px 64px; align-items: end; }
+.mq .appel h2 { font-size: clamp(2.2rem, 4.6vw, 3.8rem); font-weight: 300; line-height: 1.06; }
+.mq .appel .droite { display: grid; gap: 22px; }
+.mq .appel .mail { color: rgba(255, 255, 255, .8); font-size: .98rem; }
+
+/* ===== Pages de service : héros court, formules, cartes, puces ===== */
+.mq .hero { position: relative; color: #fff; min-height: 92vh; display: flex; align-items: flex-end; overflow: hidden; background-color: var(--nuit); background-position: center; background-size: cover; background-repeat: no-repeat; }
+.mq .hero::before { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, var(--nuit) 0%, rgba(10, 18, 48, .55) 30%, rgba(10, 18, 48, .1) 68%, rgba(10, 18, 48, .35) 100%); }
+.mq .hero-court { min-height: 64vh; }
+.mq .hero .c { position: relative; padding-top: 24vh; padding-bottom: clamp(44px, 7vw, 88px); width: 100%; }
+.mq .hero h1 { max-width: 980px; margin: 0 0 4vh; font-family: var(--titre); font-size: clamp(calc(2.6rem + 2px), calc(6.4vw + 2px), calc(5.4rem + 2px)); font-weight: 300; letter-spacing: -.04em; line-height: 1.02; color: #fff; text-shadow: 0 2px 18px rgba(0, 0, 0, .35); }
+.mq .hero .chapo { margin: 0; max-width: 460px; font-size: 1.05rem; color: rgba(255, 255, 255, .88); text-shadow: 0 2px 18px rgba(0, 0, 0, .35); }
+.mq .hero-court .chapo { max-width: 58ch; margin-top: 24px; }
+.mq .hero .btn-devis { min-height: 0; padding: 12px 24px; border: 0; border-radius: 30px; font: 600 .98rem var(--titre); white-space: nowrap; }
+.mq .fil { font-size: .93rem; color: rgba(255, 255, 255, .86); margin-bottom: 18px; }
+.mq .fil a { text-decoration: underline; text-underline-offset: 3px; }
+
+.mq .formules { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.mq .formules.trois { grid-template-columns: repeat(3, 1fr); }
+.mq .formule { background: var(--blanc); border: 1px solid var(--trait); border-radius: var(--rayon); padding: clamp(20px, 3vw, 34px); display: grid; gap: 14px; align-content: start; }
+.mq .formule.phare { border-top: 4px solid var(--turquoise); }
+.mq .formule ul { margin: 6px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.mq .formule li { padding-left: 24px; position: relative; line-height: 1.5; }
+.mq .formule li::before { content: ""; position: absolute; left: 0; top: .6em; width: 12px; height: 2px; background: var(--turquoise-texte); }
+.mq .etapes.trois { grid-template-columns: repeat(3, 1fr); }
+.mq .suite { display: flex; flex-wrap: wrap; gap: 10px; }
+.mq .puce { display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border: 1px solid var(--trait); border-radius: 999px; background: var(--blanc); text-decoration: none; font-weight: 600; font-size: .96rem; }
+.mq .puce:hover { border-color: var(--turquoise-texte); color: var(--turquoise-texte); }
+
+/* Textes en deux colonnes et formulaire des services (contenu existant, mêmes teintes que les formules) */
+.mq .colonnes { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 32px; margin-bottom: clamp(24px, 3vw, 36px); }
+.mq .colonnes p { color: var(--gris); }
+.mq .colonnes strong { color: var(--encre); font-weight: 600; }
+.mq .contact-form { display: grid; gap: 16px; max-width: 640px; }
+.mq .contact-form label { display: grid; gap: 6px; font-weight: 600; font-size: .98rem; }
+.mq .contact-form input, .mq .contact-form textarea { font: 400 1.0625rem var(--texte); min-height: 50px; padding: 12px 14px; border: 1.5px solid #b9c2dc; border-radius: 10px; background: #fff; color: var(--encre); width: 100%; }
+.mq .contact-form input:focus, .mq .contact-form textarea:focus { outline: 3px solid var(--turquoise); outline-offset: 1px; border-color: var(--turquoise-texte); }
+.mq .contact-form button { justify-self: start; min-height: 52px; padding: 0 28px; border: 0; border-radius: 999px; background: #a8dc5a; color: #16260a; font: 700 1rem var(--texte); cursor: pointer; transition: background .2s; }
+.mq .contact-form button:hover { background: #c4ec84; }
+.mq .form-note { font-size: .9rem; color: var(--gris); opacity: 1; }
+
+/* Le héros de l'accueil est fixe : l'image reste cadrée comme dans la maquette (pas de parallaxe) */
+.accueil .hero .hero-bg { top: 0; }
+.accueil .hero h1 { font-size: clamp(calc(2.6rem + 2px), calc(6.4vw + 2px), calc(5.4rem + 2px)); }
+.accueil .hero { color: #fff; }
+.accueil .hero-overlay { background: linear-gradient(0deg, var(--night) 0%, rgba(10, 18, 48, .55) 30%, rgba(10, 18, 48, .1) 68%, rgba(10, 18, 48, .35) 100%); }
+.accueil .hero h1 em { color: inherit; }
+.accueil .hero-intro { color: rgba(255, 255, 255, .88); }
+
+@media (max-width: 980px) {
+  .mq .etapes { grid-template-columns: repeat(2, 1fr); row-gap: 36px; }
+  .mq .etapes::before { display: none; }
+  .mq .projets { grid-template-columns: repeat(2, 1fr); }
+  .mq .aides { grid-template-columns: 1fr; }
+  .mq .aides img { min-height: 220px; max-height: 300px; order: -1; }
+  .mq .appel { grid-template-columns: 1fr; }
+  .mq .formules.trois { grid-template-columns: 1fr 1fr; }
+  .mq .etapes.trois { grid-template-columns: repeat(2, 1fr); }
+  .mq .colonnes { grid-template-columns: 1fr; }
+}
+@media (max-width: 650px) {
+  .mq { font-size: 1rem; }
+  .mq .hero { min-height: 88vh; }
+  .mq .formules, .mq .formules.trois { grid-template-columns: 1fr; }
+  .mq .etapes.trois { grid-template-columns: 1fr; }
+  .mq .lien-offres { width: auto; margin: calc(14px - var(--pad-section)) var(--gutter) calc(var(--pad-section) / 2) var(--gutter); text-align: left; }
+  .mq .tuiles { grid-template-columns: 1fr; gap: 14px; }
+  .mq .tuile { aspect-ratio: 16 / 10; }
+  .mq .etapes { grid-template-columns: 1fr; gap: 0; }
+  .mq .etape { padding: 0 0 26px 54px; }
+  .mq .etape::before { position: absolute; left: 0; top: 0; }
+  .mq .etape::after { content: ""; position: absolute; left: 18px; top: 40px; bottom: 4px; width: 1px; background: var(--trait); }
+  .mq .etape:last-child::after { display: none; }
+  .mq .etape h3 { margin-top: 4px; }
+}
+@media (prefers-reduced-motion: reduce) { .mq * { transition: none !important; } }

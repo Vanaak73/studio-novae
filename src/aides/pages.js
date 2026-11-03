@@ -1,17 +1,9 @@
-// Génère la section « Aides à la création de site web » dans public_html/aide-creation-site-web/ (hub + une page par région).
-// Usage : node aides-src/generer.js   (puis npm run build pour copier public_html/ dans dist/)
-const fs = require('fs');
-const path = require('path');
+// Section « Aides à la création de site web » : le hub (parcours en 3 questions + FAQ) et une page par région.
+const { DOMAINE, MAIL, DEVIS, esc } = require('../site');
+const { page } = require('../layout');
 const REGIONS = require('./donnees-regions.js');
 
-const RACINE = path.join(__dirname, '..', 'public_html');
-const SORTIE = path.join(RACINE, 'aide-creation-site-web');
-const DOMAINE = 'https://studionovae.org';
-const MAIL = 'contact@studionovae.org';
 const DATE_RELEVE = '2 novembre 2026';
-const DEVIS = `mailto:${MAIL}?subject=${encodeURIComponent('Demande de devis')}`;
-
-const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const FIABILITE = {
   officiel: ['Source officielle', 'f-officiel'],
   annuaire: ["Annuaire d'aides, à confirmer", 'f-annuaire'],
@@ -22,88 +14,6 @@ const NATIONALES = [
   { nom: 'Diagnostic et formations France Num', montant: 'Gratuit', texte: 'Test de maturité numérique et formations en ligne.' },
   { nom: "Aide au créateur d'entreprise (ARCE)", montant: '60 % des droits restants', texte: "Versée en capital aux demandeurs d'emploi indemnisés qui créent leur entreprise." }
 ];
-
-const ICONE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b1514'/%3E%3Cpath d='M18 48V16l28 32V16' fill='none' stroke='%234fc2ba' stroke-width='6' stroke-linejoin='round'/%3E%3C/svg%3E";
-
-function tete({ titre, description, url, jsonld }) {
-  return `<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>${esc(titre)}</title>
-  <meta name="description" content="${esc(description)}" />
-  <link rel="canonical" href="${DOMAINE}${url}" />
-  <meta name="theme-color" content="#eef1ee" />
-  <link rel="icon" href="${ICONE}" />
-  <meta property="og:site_name" content="Studio Novae" />
-  <meta property="og:locale" content="fr_FR" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="${esc(titre)}" />
-  <meta property="og:description" content="${esc(description)}" />
-  <meta property="og:url" content="${DOMAINE}${url}" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="${esc(titre)}" />
-  <meta name="twitter:description" content="${esc(description)}" />
-  <script type="application/ld+json">${JSON.stringify(jsonld)}</script>
-  <link rel="stylesheet" href="/assets/css/style.css" />
-  <link rel="stylesheet" href="/assets/css/aides.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet" />
-</head>
-<body class="aides">
-
-  <header class="site-header">
-    <a class="logo" href="/" aria-label="Studio Novae, accueil">STUDIO <span>·</span> NOVAE</a>
-    <nav>
-      <div class="has-menu">
-        <a class="menu-trigger" href="/#services" aria-haspopup="true">Services</a>
-        <div class="submenu">
-          <a href="/services/site-vitrine.html">Site vitrine</a>
-          <a href="/services/outil-metier.html">Outil sur mesure</a>
-          <a href="/services/boutique-en-ligne.html">Boutique en ligne</a>
-          <a href="/services/automatisation-ia.html">Automatisation & IA</a>
-          <a href="/services/video-ugc.html">Vidéo UGC (promotion)</a>
-          <a href="/services/community-management.html">Community management</a>
-        </div>
-      </div>
-      <a href="/#realisations">Réalisations</a>
-      <a href="/#methode">Méthode</a>
-      <a href="/a-propos.html">À propos</a>
-      <a class="nav-contact" href="mailto:${MAIL}">Nous contacter</a>
-      <a class="btn-devis nav-devis" href="${DEVIS}">Demander un devis</a>
-    </nav>
-  </header>
-
-  <main id="top">
-`;
-}
-
-const pied = (scripts = '') => `
-  </main>
-
-  <footer>
-    <div>
-      <a class="logo" href="/">STUDIO <span>·</span> NOVAE</a>
-      <p>Développement web et automatisation IA, depuis la France.</p>
-    </div>
-    <div class="footer-links">
-      <a href="/services/site-vitrine.html">Site vitrine</a>
-      <a href="/services/outil-metier.html">Outil sur mesure</a>
-      <a href="/services/boutique-en-ligne.html">Boutique en ligne</a>
-      <a href="/services/automatisation-ia.html">Automatisation & IA</a>
-      <a href="/services/video-ugc.html">Vidéo UGC (promotion)</a>
-      <a href="/services/community-management.html">Community management</a>
-      <a href="/aide-creation-site-web/">Aides à la création de site</a>
-      <a href="/a-propos.html">À propos</a>
-      <a href="mailto:${MAIL}">Contact</a>
-    </div>
-    <div class="footer-copy"><span>© 2026 Studio Novae</span><span>Images : <a href="https://www.magnific.com/" target="_blank" rel="noopener">Designed by Magnific</a></span><a href="#top">Retour en haut ↑</a></div>
-  </footer>
-${scripts}</body>
-</html>
-`;
 
 const faqHtml = (items, ouvrirPremier = true) => items.map((f, i) =>
   `      <details${i === 0 && ouvrirPremier ? ' open' : ''}><summary>${esc(f.q)}</summary><p>${esc(f.r)}</p></details>`).join('\n');
@@ -136,7 +46,7 @@ function hub() {
   const titre = 'Aides pour créer le site web de son entreprise, selon la région — Studio Novae';
   const description = "Les aides existent pour financer le site web d'une entreprise : trois questions suffisent pour trouver celles de votre région et de votre projet.";
   const ld = { '@context': 'https://schema.org', '@graph': [faqLd(FAQ_HUB), fil(['Accueil', '/'], ['Aides à la création de site web', '/aide-creation-site-web/'])] };
-  return tete({ titre, description, url: '/aide-creation-site-web/', jsonld: ld }) + `
+  const main = `
     <section class="az az-claire az-intro">
       <div class="az-in">
         <p class="eyebrow">Aides à la création de site web</p>
@@ -178,7 +88,15 @@ ${faqHtml(FAQ_HUB)}
         <div class="az-actions">${actionsDevis}</div>
       </div>
     </section>
-` + pied(`  <script>window.AIDES = ${JSON.stringify(donnees)};</script>\n  <script src="/assets/js/aides.js" defer></script>\n  <script src="/assets/js/site.js" defer></script>\n`);
+`;
+  return page({
+    meta: { titre, description, url: '/aide-creation-site-web/', jsonld: ld, couleur: '#eef1f9', feuilles: ['aides.css'] },
+    classeCorps: 'aides',
+    main,
+    scripts: `  <script>window.AIDES = ${JSON.stringify(donnees)};</script>
+  <script src="/assets/js/aides.js" defer></script>
+  <script src="/assets/js/site.js" defer></script>`,
+  });
 }
 
 // ---------- Pages régions ----------
@@ -208,7 +126,7 @@ function pageRegion(r) {
             <a class="az-source" href="${esc(d.source.url)}" rel="noopener">${esc(d.source.titre)} ↗</a>
           </article>`).join('');
   const nat = NATIONALES.map((n) => `<article><span class="az-type">National</span><h3>${esc(n.nom)}</h3><span class="montant">${esc(n.montant)}</span><p>${esc(n.texte)}</p></article>`).join('');
-  return tete({ titre, description, url, jsonld: ld }) + `
+  const main = `
     <section class="az az-claire az-intro">
       <div class="az-in">
         <p class="fil"><a href="/aide-creation-site-web/">Aides à la création de site web</a> › ${esc(r.nom)}</p>
@@ -250,21 +168,16 @@ ${faqHtml(items)}
         <div class="az-actions">${actionsDevis}</div>
       </div>
     </section>
-` + pied('  <script src="/assets/js/site.js" defer></script>\n');
+`;
+  return page({ meta: { titre, description, url, jsonld: ld, couleur: '#eef1f9', feuilles: ['aides.css'] }, classeCorps: 'aides', main });
 }
 
-fs.rmSync(SORTIE, { recursive: true, force: true });
-fs.mkdirSync(SORTIE, { recursive: true });
-fs.writeFileSync(path.join(SORTIE, 'index.html'), hub());
-for (const r of REGIONS) {
-  fs.mkdirSync(path.join(SORTIE, r.slug), { recursive: true });
-  fs.writeFileSync(path.join(SORTIE, r.slug, 'index.html'), pageRegion(r));
+// Retourne [{ url, html }] : le hub puis chaque région.
+function pagesAides() {
+  return [
+    { url: '/aide-creation-site-web/', html: hub() },
+    ...REGIONS.map((r) => ({ url: `/aide-creation-site-web/${r.slug}/`, html: pageRegion(r) })),
+  ];
 }
 
-// Plan du site : on ajoute le hub et les régions (une seule fois)
-const plan = path.join(RACINE, 'sitemap.xml');
-let xml = fs.readFileSync(plan, 'utf8').replace(/\s*<url><loc>https:\/\/studionovae\.org\/aide-creation-site-web\/[^<]*<\/loc><\/url>/g, '');
-const urls = ['/aide-creation-site-web/', ...REGIONS.map((r) => `/aide-creation-site-web/${r.slug}/`)];
-xml = xml.replace('</urlset>', urls.map((u) => `  <url><loc>${DOMAINE}${u}</loc></url>\n`).join('') + '</urlset>');
-fs.writeFileSync(plan, xml);
-console.log(`${REGIONS.length + 1} pages écrites dans public_html/aide-creation-site-web/ et plan du site mis à jour.`);
+module.exports = { pagesAides, REGIONS };

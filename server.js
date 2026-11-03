@@ -1,14 +1,14 @@
-// Serveur Node de Studio Novae : sert le dossier public_html (pages, assets/css, assets/js, assets/images), sans dépendance.
+// Serveur Node de Studio Novae, sans dépendance. Les pages sont générées en mémoire (src/), au démarrage puis
+// toutes les 24 h en arrière-plan ; public_html/assets/ contient uniquement les fichiers (css, js, images).
 // Variables : PORT (défaut 10000), NOINDEX ("0" pour la production, sinon l'aperçu n'est pas indexé).
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const rendu = require('./src/rendu');
 
 const PORT = Number(process.env.PORT) || 10000;
 const NOINDEX = process.env.NOINDEX !== '0';
-// Après `npm run build`, tout est servi depuis dist/ ; sans build, directement depuis public_html/.
-const DIST = path.join(__dirname, 'dist');
-const SITE = fs.existsSync(DIST) ? DIST : path.join(__dirname, 'public_html');
+const SITE = path.join(__dirname, 'public_html');
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -45,14 +45,8 @@ function resoudre(base, relatif) {
   return fichier;
 }
 
-function fichierOuIndex(fichier) {
-  let stat;
-  try { stat = fs.statSync(fichier); } catch { return null; }
-  if (stat.isDirectory()) {
-    const index = path.join(fichier, 'index.html');
-    return fs.existsSync(index) ? index : null;
-  }
-  return fichier;
+function fichierSimple(fichier) {
+  try { return fs.statSync(fichier).isFile() ? fichier : null; } catch { return null; }
 }
 
 const serveur = http.createServer((req, res) => {
@@ -65,22 +59,36 @@ const serveur = http.createServer((req, res) => {
   catch { return envoyer(res, 400, 'Adresse invalide'); }
   if (chemin.includes('\0')) return envoyer(res, 400, 'Adresse invalide');
 
+  // Une seule adresse pour le site : www.studionovae.org redirige vers studionovae.org
+  const hote = String(req.headers['x-forwarded-host'] || req.headers.host || '');
+  if (/^www\.studionovae\.org(:\d+)?$/i.test(hote)) return envoyer(res, 301, '', { Location: 'https://studionovae.org' + req.url });
+
   // L'accueil n'a qu'une adresse : /index.html redirige vers /
   if (chemin === '/index.html') return envoyer(res, 301, '', { Location: '/' });
 
   const ancienne = chemin.match(ANCIENNES);
   if (ancienne) return envoyer(res, 301, '', { Location: `/services/${ancienne[1]}.html` });
 
-  const base = SITE;
+  // Pages générées (accueil, services, aides, plan du site, robots.txt)
+  const generee = rendu.pages().get(chemin);
+  if (generee) {
+    const entetes = { 'Content-Type': generee.type, 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff' };
+    if (NOINDEX) entetes['X-Robots-Tag'] = 'noindex, nofollow, noarchive';
+    res.writeHead(200, entetes);
+    return res.end(req.method === 'HEAD' ? '' : generee.corps);
+  }
+
+  // Fichiers : uniquement sous /assets/
+  if (!chemin.startsWith('/assets/')) return envoyer(res, 404, 'Page introuvable', { 'Content-Type': 'text/plain; charset=utf-8' });
   const relatif = chemin.replace(/^\/+/, '');
-  const cible = resoudre(base, relatif);
-  const fichier = cible && fichierOuIndex(cible);
+  const cible = resoudre(SITE, relatif);
+  const fichier = cible && fichierSimple(cible);
   if (!fichier) return envoyer(res, 404, 'Page introuvable', { 'Content-Type': 'text/plain; charset=utf-8' });
 
   const ext = path.extname(fichier).toLowerCase();
   const entetes = {
     'Content-Type': TYPES[ext] || 'application/octet-stream',
-    'Cache-Control': ext === '.html' ? 'no-cache' : 'public, max-age=3600',
+    'Cache-Control': 'public, max-age=3600',
   };
   if (req.method === 'HEAD') return envoyer(res, 200, '', entetes);
   if (NOINDEX) entetes['X-Robots-Tag'] = 'noindex, nofollow, noarchive';
@@ -89,4 +97,5 @@ const serveur = http.createServer((req, res) => {
   fs.createReadStream(fichier).on('error', () => res.destroy()).pipe(res);
 });
 
+console.log(`${rendu.demarrer()} pages générées`);
 serveur.listen(PORT, () => console.log(`Studio Novae : http://localhost:${PORT} (indexation ${NOINDEX ? 'bloquée' : 'autorisée'})`));

@@ -1,0 +1,28 @@
+{
+ "titre": "À propos — Studio Novae",
+ "description": "Studio Novae crée des sites, des outils et des automatisations IA, avec une approche simple et accessible.",
+ "og": "accueil.jpg",
+ "img": "/assets/images/montagnes-coucher-soleil.jpg",
+ "pill": "À propos",
+ "h1": "Le numérique,<br /><em>simple et utile.</em>",
+ "intro": "Studio Novae accompagne les indépendants et les entreprises qui veulent un site, un outil ou une automatisation fiable, expliqué en mots simples.",
+ "sections": [
+  {
+   "eyebrow": "Notre approche",
+   "h2": "Trois convictions qui guident chaque projet.",
+   "corps": "<div class=\"card-grid card-grid-3\">\n        <div class=\"card\"><h3>Parler clairement</h3><p>Chaque choix technique est expliqué simplement. Vous comprenez ce que vous avez, pourquoi, et comment cela vous sert.</p></div>\n        <div class=\"card\"><h3>Partir de votre besoin</h3><p>La technologie vient après vos objectifs. Nous construisons ce qui vous fait gagner du temps ou des clients, rien de superflu.</p></div>\n        <div class=\"card\"><h3>Bâtir pour durer</h3><p>Des solutions solides, que vous gardez sous votre contrôle et qui s'enrichissent avec votre activité.</p></div>\n      </div>"
+  },
+  {
+   "classe": "page-section-soft",
+   "eyebrow": "Ce que nous maîtrisons",
+   "h2": "Une boîte à outils complète, au service de vos projets.",
+   "corps": "<div class=\"two-col\">\n        <p>Création de sites, d'outils métier et de boutiques en ligne, mise en place d'automatisations avec n8n, assistants IA basés sur Claude (Anthropic), outils Google pour la visibilité en ligne, services d'envoi d'e-mails et de création de vidéos par IA.</p>\n        <p>Chaque projet associe ces briques selon vos besoins, pour un ensemble cohérent qui fonctionne dès le premier jour.</p>\n      </div>"
+  },
+  {
+   "cta": {
+    "eyebrow": "Faisons connaissance",
+    "h2": "Parlons de <em>votre projet.</em>"
+   }
+  }
+ ]
+}
