@@ -1,10 +1,10 @@
-// Génère la section « Aides à la création de site web » dans v4/aide-creation-site-web/ (hub + une page par région).
-// Usage : node aides-src/generer.js   (puis npm run build pour copier v4/ dans dist/)
+// Génère la section « Aides à la création de site web » dans public_html/aide-creation-site-web/ (hub + une page par région).
+// Usage : node aides-src/generer.js   (puis npm run build pour copier public_html/ dans dist/)
 const fs = require('fs');
 const path = require('path');
 const REGIONS = require('./donnees-regions.js');
 
-const RACINE = path.join(__dirname, '..', 'v4');
+const RACINE = path.join(__dirname, '..', 'public_html');
 const SORTIE = path.join(RACINE, 'aide-creation-site-web');
 const DOMAINE = 'https://studionovae.org';
 const MAIL = 'contact@studionovae.org';
@@ -46,8 +46,8 @@ function tete({ titre, description, url, jsonld }) {
   <meta name="twitter:title" content="${esc(titre)}" />
   <meta name="twitter:description" content="${esc(description)}" />
   <script type="application/ld+json">${JSON.stringify(jsonld)}</script>
-  <link rel="stylesheet" href="/style.css" />
-  <link rel="stylesheet" href="/aides.css" />
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <link rel="stylesheet" href="/assets/css/aides.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet" />
@@ -72,6 +72,7 @@ function tete({ titre, description, url, jsonld }) {
       <a href="/#methode">Méthode</a>
       <a href="/a-propos.html">À propos</a>
       <a class="nav-contact" href="mailto:${MAIL}">Nous contacter</a>
+      <a class="btn-devis nav-devis" href="${DEVIS}">Demander un devis</a>
     </nav>
   </header>
 
@@ -177,7 +178,7 @@ ${faqHtml(FAQ_HUB)}
         <div class="az-actions">${actionsDevis}</div>
       </div>
     </section>
-` + pied(`  <script>window.AIDES = ${JSON.stringify(donnees)};</script>\n  <script src="/aides.js" defer></script>\n  <script src="/site.js" defer></script>\n`);
+` + pied(`  <script>window.AIDES = ${JSON.stringify(donnees)};</script>\n  <script src="/assets/js/aides.js" defer></script>\n  <script src="/assets/js/site.js" defer></script>\n`);
 }
 
 // ---------- Pages régions ----------
@@ -249,7 +250,7 @@ ${faqHtml(items)}
         <div class="az-actions">${actionsDevis}</div>
       </div>
     </section>
-` + pied('  <script src="/site.js" defer></script>\n');
+` + pied('  <script src="/assets/js/site.js" defer></script>\n');
 }
 
 fs.rmSync(SORTIE, { recursive: true, force: true });
@@ -266,4 +267,4 @@ let xml = fs.readFileSync(plan, 'utf8').replace(/\s*<url><loc>https:\/\/studiono
 const urls = ['/aide-creation-site-web/', ...REGIONS.map((r) => `/aide-creation-site-web/${r.slug}/`)];
 xml = xml.replace('</urlset>', urls.map((u) => `  <url><loc>${DOMAINE}${u}</loc></url>\n`).join('') + '</urlset>');
 fs.writeFileSync(plan, xml);
-console.log(`${REGIONS.length + 1} pages écrites dans v4/aide-creation-site-web/ et plan du site mis à jour.`);
+console.log(`${REGIONS.length + 1} pages écrites dans public_html/aide-creation-site-web/ et plan du site mis à jour.`);

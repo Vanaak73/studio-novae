@@ -6,7 +6,10 @@
   "main": "server.js",
   "scripts": {
     "build": "node build.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "controle": "node scripts/controle-site.js",
+    "controle:prod": "node scripts/controle-site.js --prod",
+    "test:demarrage": "node scripts/test-demarrage.js"
   },
   "engines": {
     "node": ">=20"

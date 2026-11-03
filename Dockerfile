@@ -7,8 +7,7 @@ ENV NODE_ENV=production
 ENV PORT=10000
 
 COPY package.json server.js build.js ./
-COPY v4/ ./v4/
-COPY assets/ ./assets/
+COPY public_html/ ./public_html/
 RUN npm run build
 
 USER node

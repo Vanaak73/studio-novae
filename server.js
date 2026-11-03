@@ -1,4 +1,4 @@
-// Serveur Node de Studio Novae : sert le site v4 et le dossier assets, sans dépendance.
+// Serveur Node de Studio Novae : sert le dossier public_html (pages, assets/css, assets/js, assets/images), sans dépendance.
 // Variables : PORT (défaut 10000), NOINDEX ("0" pour la production, sinon l'aperçu n'est pas indexé).
 const http = require('http');
 const fs = require('fs');
@@ -6,10 +6,9 @@ const path = require('path');
 
 const PORT = Number(process.env.PORT) || 10000;
 const NOINDEX = process.env.NOINDEX !== '0';
-// Après `npm run build`, tout est servi depuis dist/ ; sans build, directement depuis v4/ et assets/.
+// Après `npm run build`, tout est servi depuis dist/ ; sans build, directement depuis public_html/.
 const DIST = path.join(__dirname, 'dist');
-const SITE = fs.existsSync(DIST) ? DIST : path.join(__dirname, 'v4');
-const ASSETS = fs.existsSync(DIST) ? path.join(DIST, 'assets') : path.join(__dirname, 'assets');
+const SITE = fs.existsSync(DIST) ? DIST : path.join(__dirname, 'public_html');
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -72,9 +71,8 @@ const serveur = http.createServer((req, res) => {
   const ancienne = chemin.match(ANCIENNES);
   if (ancienne) return envoyer(res, 301, '', { Location: `/services/${ancienne[1]}.html` });
 
-  const [base, relatif] = chemin.startsWith('/assets/')
-    ? [ASSETS, chemin.slice('/assets/'.length)]
-    : [SITE, chemin.replace(/^\/+/, '')];
+  const base = SITE;
+  const relatif = chemin.replace(/^\/+/, '');
   const cible = resoudre(base, relatif);
   const fichier = cible && fichierOuIndex(cible);
   if (!fichier) return envoyer(res, 404, 'Page introuvable', { 'Content-Type': 'text/plain; charset=utf-8' });
