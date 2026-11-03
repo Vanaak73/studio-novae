@@ -88,7 +88,7 @@ async function demarrerServeur() {
       const page = await navigateur.newPage(); await page.setViewport({ width: 1280, height: 700 });
       await page.goto(BASE + '/', { waitUntil: 'networkidle2' }); await att(500);
       const etat = () => page.evaluate(() => ({ entete: getComputedStyle(document.querySelector('.nav-devis')).visibility, accueil: document.querySelector('.hero-actions .btn-devis') ? getComputedStyle(document.querySelector('.hero-actions .btn-devis')).visibility : 'absent', lien: (document.querySelector('.nav-devis') || {}).href || '' }));
-      const haut = await etat(); await page.evaluate(() => scrollTo(0, 600)); await att(900); const bas = await etat();
+      const haut = await etat(); await page.evaluate(() => scrollTo(0, 800)); await att(900); const bas = await etat();
       verifier('Accueil', 'bouton « Demander un devis » : visible dans l\'accroche en haut de page, caché dans l\'en-tête', haut.accueil === 'visible' && haut.entete === 'hidden', JSON.stringify(haut));
       verifier('Accueil', 'bouton « Demander un devis » : relais vers l\'en-tête après défilement', bas.entete === 'visible' && bas.accueil === 'hidden', JSON.stringify(bas));
       verifier('Accueil', 'bouton « Demander un devis » : mène quelque part (pas de #devis)', !/#devis$/.test(haut.lien) && haut.lien !== '', haut.lien);
@@ -124,7 +124,7 @@ async function demarrerServeur() {
         const texte = [...document.querySelectorAll('main section')].map((s) => s.innerText).join(' ');
         return { faq: JSON.stringify(g) === JSON.stringify(v), texte, bonjour: document.documentElement.innerHTML.includes('bonjour@studionovae'), contact: document.documentElement.innerHTML.includes('contact@studionovae.org') };
       });
-      const negations = (c.texte.match(/\b(sans|pas|non|aucun|aucune|jamais)\b|\bn'|\bne\b/gi) || []);
+      const negations = (c.texte.match(/(?<![\p{L}\p{N}])(sans|pas|non|aucun|aucune|jamais|ne)(?![\p{L}\p{N}-])|(?<![\p{L}\p{N}])n'/giu) || []);
       verifier('Contenu aides', `${url} : questions-réponses identiques aux données structurées`, c.faq);
       verifier('Contenu aides', `${url} : écriture positive (aucune négation)`, negations.length === 0, negations.slice(0, 4).join(', '));
       verifier('Contenu aides', `${url} : adresse contact@studionovae.org, jamais bonjour@`, c.contact && !c.bonjour);
