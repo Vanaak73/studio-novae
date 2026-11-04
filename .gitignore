@@ -3,3 +3,6 @@
 screenshot/
 idees/
 dist/
+data/
+node_modules/
+.env

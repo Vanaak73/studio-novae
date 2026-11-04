@@ -1,7 +1,8 @@
 // Données communes à toutes les pages : identité, adresses, liste des services.
 const DOMAINE = 'https://studionovae.org';
 const MAIL = 'contact@studionovae.org';
-const DEVIS = `mailto:${MAIL}?subject=${encodeURIComponent('Demande de devis')}`;
+// Tous les boutons « Demander un devis » mènent à la page Contact (outil de devis) ; ceux des pages de service présélectionnent le service.
+const DEVIS = '/contact.html';
 
 const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -16,6 +17,17 @@ const SERVICES = [
 ];
 
 const urlService = (slug) => `/services/${slug}.html`;
-const devisPour = (nom) => `mailto:${MAIL}?subject=${encodeURIComponent('Demande de devis : ' + nom)}`;
+const devisPour = (nom) => { const s = SERVICES.find((x) => x.nom === nom); return s ? `${DEVIS}?service=${s.slug}` : DEVIS; };
 
-module.exports = { DOMAINE, MAIL, DEVIS, esc, SERVICES, urlService, devisPour };
+// Section « Des projets déjà en ligne » (accueil) et lien « Réalisations » du menu : masqués tant que la liste est courte. Passer à true pour les réafficher.
+const REALISATIONS_VISIBLES = false;
+
+// Sites réalisés : listés dans la section Réalisations (si affichée) et toujours dans le pied de page, liens suivis par les moteurs de recherche.
+const PROJETS = [
+  { nom: 'Producteurs Locaux', detail: 'Annuaire et carte du circuit court, France', url: 'https://producteurslocaux.org', logo: 'icone-producteurslocaux.webp' },
+  { nom: 'Fairy Nail Art', detail: 'Prothésiste ongulaire, Chambéry', url: 'https://fairynailart.fr', logo: 'icone-fairynailart.webp' },
+  { nom: 'Khrua Siam', detail: 'Traiteur thaïlandais, Chambéry', url: 'https://khrua-siam.fr', logo: 'icone-khrua-siam.webp' },
+  { nom: 'Roof Monkeys', detail: 'Couvreur-zingueur, Morlaix', url: 'https://roofmonkeys.fr', logo: 'icone-roofmonkeys.webp' },
+];
+
+module.exports = { DOMAINE, MAIL, DEVIS, esc, SERVICES, urlService, devisPour, REALISATIONS_VISIBLES, PROJETS };

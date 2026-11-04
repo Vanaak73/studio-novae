@@ -2,17 +2,22 @@
   "name": "studio-novae",
   "version": "1.0.0",
   "private": true,
-  "description": "Site Studio Novae : pages générées par Node, sans dépendance",
+  "description": "Site Studio Novae : pages générées par Node (seule dépendance : mysql2, pour enregistrer les demandes de la page Contact)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "build": "node -e \"console.log('Rien à construire : les pages sont générées au démarrage')\"",
     "test": "node scripts/test-rendu.js",
     "test:demarrage": "node scripts/test-demarrage.js",
+    "test:contact": "node scripts/test-contact.js",
+    "test:base": "node scripts/test-base.js",
     "controle": "node scripts/controle-site.js",
     "controle:prod": "node scripts/controle-site.js --prod"
   },
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "mysql2": "^3.24.6"
   }
 }

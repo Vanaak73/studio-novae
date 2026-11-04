@@ -59,6 +59,8 @@
 .mq .section { padding: var(--pad-section) 0; }
 .mq .section.blanc { background: var(--blanc); }
 .mq .section.sombre { background: var(--nuit); color: #fff; }
+/* Appel final : halo bleu électrique très léger (derrière le bouton), le fond reste bleu nuit */
+.mq #contact.sombre { background: radial-gradient(110% 170% at 72% 55%, rgba(108, 155, 255, .26), rgba(108, 155, 255, 0) 75%), #121e4d; }
 .mq .tete-section { display: grid; gap: 14px; margin-bottom: clamp(28px, 4vw, 48px); max-width: 62ch; }
 .mq .tete-section .chapo { max-width: 56ch; }
 
@@ -66,6 +68,7 @@
 .mq .zone-tuiles { padding: 0 var(--gutter); }
 .mq .tuiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.6vw; }
 .mq .tuile { position: relative; display: flex; align-items: flex-end; aspect-ratio: 16 / 8.2; border-radius: var(--rayon); overflow: hidden; color: #fff; text-decoration: none; background: var(--nuit) center/cover no-repeat; isolation: isolate; }
+.mq .tuile img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; }
 .mq .tuile::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, rgba(7, 12, 36, .78) 0%, rgba(7, 12, 36, .28) 48%, rgba(7, 12, 36, 0) 75%); }
 .mq .tuile div { padding: clamp(16px, 2.4vw, 28px); text-shadow: 0 1px 12px rgba(0, 0, 0, .4); }
 .mq .tuile h3 { font-size: clamp(1.35rem, 2.2vw, 1.75rem); font-weight: 400; }
@@ -87,13 +90,19 @@
 .mq .aides .texte { padding: clamp(24px, 4vw, 52px); display: grid; gap: 18px; align-content: center; }
 .mq .aides img { width: 100%; height: 100%; min-height: 280px; object-fit: cover; }
 
-/* Réalisations */
-.mq .projets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-.mq .projet { text-decoration: none; display: block; }
-.mq .projet img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--rayon); border: 1px solid var(--trait); }
+/* Réalisations : rangée à faire glisser (souris : saisir ; doigt : défilement natif), points de position */
+.mq .projets { display: flex; gap: 24px; margin: 0 calc(var(--g) * -1); padding: 0 var(--g) 6px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-left: var(--g); scrollbar-width: none; cursor: grab; }
+.mq .projets::-webkit-scrollbar { display: none; }
+.mq .projets[data-glisse] { cursor: grabbing; user-select: none; scroll-snap-type: none; }
+.mq .projets:focus-visible { outline: 3px solid var(--turquoise); outline-offset: 4px; }
+.mq .projet { flex: 0 0 clamp(240px, 26vw, 380px); scroll-snap-align: start; text-decoration: none; display: block; }
+@media (min-width: 981px) { .mq .projet { flex-basis: clamp(120px, 13vw, 190px); } }
+.mq .projet img { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; border-radius: var(--rayon); border: 1px solid var(--trait); }
 .mq .projet strong { display: block; margin-top: 12px; font: 500 1.1rem var(--titre); }
 .mq .projet span { font-size: .93rem; color: var(--gris); }
 .mq .projet:hover strong { color: var(--turquoise-texte); }
+.mq .dots i { background: var(--trait); }
+.mq .dots i.on { background: var(--mauve-texte); }
 
 /* Appel final */
 .mq .appel { display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px 64px; align-items: end; }
@@ -137,18 +146,40 @@
 .mq .contact-form button:hover { background: #c4ec84; }
 .mq .form-note { font-size: .9rem; color: var(--gris); opacity: 1; }
 
-/* Le héros de l'accueil est fixe : l'image reste cadrée comme dans la maquette (pas de parallaxe) */
-.accueil .hero .hero-bg { top: 0; }
+/* Photo du héros : sa hauteur est exactement celle du héros (100 % de la couche moins les 40vh qui dépassent au-dessus), alignée sur le bas, sans débordement.
+   Le fondu de 160 px bleu nuit se place sur le bord haut de la photo. La couche dépasse de 40vh vers le haut pour que la parallaxe
+   (35 % du défilement) dure pendant tout le héros ; la zone découverte au-dessus de la photo est du bleu nuit. */
+.accueil .hero .hero-bg {
+  top: -40vh;
+  background-image: linear-gradient(var(--night), rgba(10, 18, 48, 0)), var(--img);
+  background-size: 100% 160px, auto calc(100% - 40vh);
+  background-position: 0 40vh, 58% 100%;
+  background-repeat: no-repeat;
+}
+/* Téléphone en portrait : version découpée de la photo (même hauteur, seule la zone visible est envoyée) */
+@media (max-width: 650px) and (orientation: portrait) {
+  .accueil .hero .hero-bg { background-image: linear-gradient(var(--night), rgba(10, 18, 48, 0)), var(--img-m); background-position: 0 40vh, 50% 100%; }
+}
 .accueil .hero h1 { font-size: clamp(calc(2.6rem + 2px), calc(6.4vw + 2px), calc(5.4rem + 2px)); }
 .accueil .hero { color: #fff; }
 .accueil .hero-overlay { background: linear-gradient(0deg, var(--night) 0%, rgba(10, 18, 48, .55) 30%, rgba(10, 18, 48, .1) 68%, rgba(10, 18, 48, .35) 100%); }
 .accueil .hero h1 em { color: inherit; }
+/* Titre qui se déchiffre (site.js) : masqué jusqu'au départ de l'effet ; si le script ne démarre pas, il apparaît seul au bout de 3 s. */
+.js .accueil .hero h1:not(.dc-pret) { opacity: 0; animation: dc-secours 0s 3s forwards; }
+@keyframes dc-secours { to { opacity: 1; } }
+.dc-mot { display: inline-block; white-space: nowrap; }
+.dc-l { display: inline-block; text-align: center; transition: color .6s ease-out, text-shadow .7s ease-out, opacity .4s; }
+.accueil .hero h1 { position: relative; }
+.dc-l.dc-cache { visibility: hidden; }
+.dc-curseur { position: absolute; width: 3px; margin-left: -1px; border-radius: 2px; background: rgb(108, 155, 255); box-shadow: 0 0 12px 2px rgba(108, 155, 255, .85); opacity: 0; pointer-events: none; }
+.dc-curseur.dc-on { opacity: 1; }
+.dc-l.dc-brouille { color: rgb(108, 155, 255); opacity: .85; text-shadow: 0 0 14px rgba(108, 155, 255, .75); transition: none; }
+
 .accueil .hero-intro { color: rgba(255, 255, 255, .88); }
 
 @media (max-width: 980px) {
   .mq .etapes { grid-template-columns: repeat(2, 1fr); row-gap: 36px; }
   .mq .etapes::before { display: none; }
-  .mq .projets { grid-template-columns: repeat(2, 1fr); }
   .mq .aides { grid-template-columns: 1fr; }
   .mq .aides img { min-height: 220px; max-height: 300px; order: -1; }
   .mq .appel { grid-template-columns: 1fr; }

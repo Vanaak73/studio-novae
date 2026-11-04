@@ -17,6 +17,7 @@ function recharger() {
 function construire() {
   recharger();
   const { pageAccueil } = require('./pages/accueil');
+  const { pageContact, URL_CONTACT } = require('./pages/contact');
   const { pagesContenu } = require('./pages/contenu');
   const { pagesAides } = require('./aides/pages');
 
@@ -26,6 +27,7 @@ function construire() {
     pages.set(url, { corps, type });
   };
   ajouter('/', pageAccueil(), 'text/html; charset=utf-8');
+  ajouter(URL_CONTACT, pageContact(), 'text/html; charset=utf-8');
   for (const p of [...pagesContenu(), ...pagesAides()]) ajouter(p.url, p.html, 'text/html; charset=utf-8');
 
   const urls = [...pages.keys()];

@@ -1,10 +1,13 @@
 // Serveur Node de Studio Novae, sans dépendance. Les pages sont générées en mémoire (src/), au démarrage puis
 // toutes les 24 h en arrière-plan ; public_html/assets/ contient uniquement les fichiers (css, js, images).
 // Variables : PORT (défaut 10000), NOINDEX ("0" pour la production, sinon l'aperçu n'est pas indexé).
+require('./src/env').charger(); // réglages du fichier .env (jamais versionné) avant de lire process.env
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const zlib = require('zlib');
 const rendu = require('./src/rendu');
+const apiContact = require('./src/api-contact');
 
 const PORT = Number(process.env.PORT) || 10000;
 const NOINDEX = process.env.NOINDEX !== '0';
@@ -31,6 +34,24 @@ const TYPES = {
 // Anciennes adresses des pages services -> /services/
 const ANCIENNES = /^\/(site-vitrine|outil-metier|boutique-en-ligne|automatisation-ia)\.html$/;
 
+// Compression Brotli ou gzip des fichiers texte, gardée en mémoire (clé : contenu + encodage).
+const COMPRESSIBLES = /^(text\/|application\/(json|xml|javascript)|image\/svg)/;
+const cacheCompression = new Map();
+function compresser(req, type, corps, cle) {
+  const accepte = String(req.headers['accept-encoding'] || '');
+  const encodage = /(^|[ ,])br([ ,;]|$)/.test(accepte) ? 'br' : /gzip/.test(accepte) ? 'gzip' : null;
+  if (!encodage || !COMPRESSIBLES.test(type) || corps.length < 1024) return { corps, encodage: null };
+  const k = `${encodage}|${cle}`;
+  if (!cacheCompression.has(k)) {
+    const tampon = Buffer.from(corps);
+    cacheCompression.set(k, encodage === 'br'
+      ? zlib.brotliCompressSync(tampon, { params: { [zlib.constants.BROTLI_PARAM_QUALITY]: 9 } })
+      : zlib.gzipSync(tampon, { level: 9 }));
+    if (cacheCompression.size > 200) cacheCompression.delete(cacheCompression.keys().next().value);
+  }
+  return { corps: cacheCompression.get(k), encodage };
+}
+
 function envoyer(res, code, corps, entetes = {}) {
   if (NOINDEX) entetes['X-Robots-Tag'] = 'noindex, nofollow, noarchive';
   entetes['X-Content-Type-Options'] = 'nosniff';
@@ -50,6 +71,9 @@ function fichierSimple(fichier) {
 }
 
 const serveur = http.createServer((req, res) => {
+  // Seule route qui accepte POST : le formulaire de la page Contact
+  if (String(req.url).split('?')[0] === '/api/contact') return apiContact.traiter(req, res);
+
   if (req.method !== 'GET' && req.method !== 'HEAD') {
     return envoyer(res, 405, 'Méthode non autorisée', { Allow: 'GET, HEAD' });
   }
@@ -74,8 +98,11 @@ const serveur = http.createServer((req, res) => {
   if (generee) {
     const entetes = { 'Content-Type': generee.type, 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff' };
     if (NOINDEX) entetes['X-Robots-Tag'] = 'noindex, nofollow, noarchive';
+    const { corps, encodage } = compresser(req, generee.type, generee.corps, `${chemin}|${generee.corps.length}`);
+    entetes.Vary = 'Accept-Encoding';
+    if (encodage) entetes['Content-Encoding'] = encodage;
     res.writeHead(200, entetes);
-    return res.end(req.method === 'HEAD' ? '' : generee.corps);
+    return res.end(req.method === 'HEAD' ? '' : corps);
   }
 
   // Fichiers : uniquement sous /assets/
@@ -86,13 +113,20 @@ const serveur = http.createServer((req, res) => {
   if (!fichier) return envoyer(res, 404, 'Page introuvable', { 'Content-Type': 'text/plain; charset=utf-8' });
 
   const ext = path.extname(fichier).toLowerCase();
-  const entetes = {
-    'Content-Type': TYPES[ext] || 'application/octet-stream',
-    'Cache-Control': 'public, max-age=3600',
-  };
+  const type = TYPES[ext] || 'application/octet-stream';
+  // Images et polices : 30 jours ; css et js : 1 jour (les noms de fichiers ne changent pas à chaque version).
+  const entetes = { 'Content-Type': type, 'Cache-Control': /^\.(css|js)$/.test(ext) ? 'public, max-age=86400' : 'public, max-age=2592000', Vary: 'Accept-Encoding' };
   if (req.method === 'HEAD') return envoyer(res, 200, '', entetes);
   if (NOINDEX) entetes['X-Robots-Tag'] = 'noindex, nofollow, noarchive';
   entetes['X-Content-Type-Options'] = 'nosniff';
+  if (COMPRESSIBLES.test(type)) {
+    let stat, texte;
+    try { stat = fs.statSync(fichier); texte = fs.readFileSync(fichier); } catch { return res.destroy(); }
+    const { corps, encodage } = compresser(req, type, texte, `${fichier}|${stat.mtimeMs}`);
+    if (encodage) entetes['Content-Encoding'] = encodage;
+    res.writeHead(200, entetes);
+    return res.end(corps);
+  }
   res.writeHead(200, entetes);
   fs.createReadStream(fichier).on('error', () => res.destroy()).pipe(res);
 });

@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const RACINE = path.join(__dirname, '..');
 const ASSETS = path.join(RACINE, 'public_html');
-const { DOMAINE, SERVICES } = require('../src/site');
+const { DOMAINE, SERVICES, REALISATIONS_VISIBLES } = require('../src/site');
 const rendu = require('../src/rendu');
 
 let echecs = 0;
@@ -67,13 +67,13 @@ ok('menu Services identique et complet sur toutes les pages', menusOk);
 
 // --- Accueil
 const accueil = pages.get('/').corps;
-ok('accueil : 6 tuiles de services, 4 réalisations, 4 étapes de méthode', (accueil.match(/class="tuile"/g) || []).length === 6 && (accueil.match(/class="projet"/g) || []).length === 4 && (accueil.match(/class="etape"/g) || []).length === 4);
+ok('accueil : 6 tuiles de services, réalisations (si affichées), 4 étapes de méthode', (accueil.match(/class="tuile"/g) || []).length === 6 && (accueil.match(/class="projet"/g) || []).length === (REALISATIONS_VISIBLES ? 4 : 0) && (accueil.match(/class="etape"/g) || []).length === 4);
 ok('accueil : les 6 tuiles de services sont dans la même grille, à égalité', (accueil.match(/<div class="tuiles" id="offres">([\s\S]*?)<\/div>\s*<\/div>\s*<\/section>/) || [, ''])[1].split('class="tuile"').length === 7);
-ok("accueil : image du héros (œil numérique), accroche et feuille maquette.css", accueil.includes('hero-oeil-numerique.jpg') && accueil.includes('Des outils qui travaillent') && accueil.includes('/assets/css/maquette.css') && fs.existsSync(path.join(ASSETS, 'assets/images/hero-oeil-numerique.jpg')));
+ok("accueil : image du héros (œil numérique), accroche et feuille maquette.css", accueil.includes('hero-oeil-numerique.webp') && accueil.includes('Des outils qui travaillent') && accueil.includes('/assets/css/maquette.css') && fs.existsSync(path.join(ASSETS, 'assets/images/hero-oeil-numerique.webp')));
 ok('accueil : trois « Demander un devis » (en-tête, accroche, appel final) et lien « Voir les services »', (accueil.match(/Demander un devis/g) || []).length === 3 && accueil.includes('class="lien-offres"'));
 ok('accueil : « (e-commerce) » insécable dans la tuile Boutique', accueil.includes('(e&#8209;commerce)'));
 ok("accueil : bouton « Demander un devis » dans l'en-tête et dans l'accroche", accueil.includes('nav-devis') && accueil.includes('hero-actions'));
-ok('accueil : ancres #aides #services #methode #realisations #contact', ['id="aides"', 'id="services"', 'id="methode"', 'id="realisations"', 'id="contact"'].every((a) => accueil.includes(a)));
+ok('accueil : ancres #aides #services #methode #contact (et #realisations si affichées)', ['id="aides"', 'id="services"', 'id="methode"', 'id="contact"'].every((a) => accueil.includes(a)) && accueil.includes('id="realisations"') === REALISATIONS_VISIBLES);
 
 // --- Services
 for (const s of SERVICES) {
@@ -107,7 +107,9 @@ ok('bouton « Demander un devis » et point du logo : même vert vif', css.inclu
 ok("en-tête : survol et soulignement animé en vert vif, texte +2 px", css.includes('color: var(--vif); opacity: 1;') && css.includes('height: 2px; background: var(--vif);') && css.includes('calc(0.88rem + 2px)') && css.includes('calc(0.95rem + 2px)'));
 ok("en-tête : le bouton de l'accroche passe devant l'en-tête et s'aligne sur celui de l'en-tête", css.includes('z-index: 30') && css.includes('.nav-devis { margin-left: 15px; margin-right: 15px; }'));
 ok("en-tête : fond bleu nuit translucide dès le premier défilement", js.includes('entete.classList.toggle("plein", y > 2)'));
-ok("accueil : héros sans parallaxe, cadrage de la maquette", cssAccueil.includes('.accueil .hero .hero-bg { top: 0; }'));
+ok("accueil : parallaxe du héros active (couche décalée vers le haut, script de défilement)", cssAccueil.includes('top: -40vh;') && accueil.includes('hero-bg parallax-layer') && js.includes("querySelectorAll('.parallax-layer')"));
+ok("accueil : réalisations en carrousel à glisser, avec points de position", (!REALISATIONS_VISIBLES || (accueil.includes('class="projets" data-glisser') && accueil.includes('class="dots"'))) && cssAccueil.includes('scroll-snap-type: x mandatory') && js.includes("querySelectorAll('[data-glisser]')"));
+ok("apparition au défilement : classe .js dans l'en-tête, styles .rv/.vu, script sans effet si « réduire les animations »", accueil.includes("classList.add('js')") && css.includes('.js .rv {') && css.includes('.js .rv.vu {') && js.includes("new IntersectionObserver") && /if \(!reduced && !robot && 'IntersectionObserver' in window\)/.test(js) && js.includes('window.innerHeight > 3000'));
 
 // --- Rafraîchissement toutes les 24 h : reconstruction en arrière-plan, la version actuelle reste servie
 (async () => {

@@ -12,9 +12,9 @@
   --vif: #a8dc5a;
   --sans: 'Manrope', sans-serif;
   --display: 'Space Grotesk', sans-serif;
-  --dot-teal: rgba(108, 155, 255, 0.55);
-  --dot-mauve: rgba(155, 123, 255, 0.55);
-  --dot-red: rgba(127, 208, 255, 0.55);
+  --dot-teal: rgba(130, 170, 255, 0.95);
+  --dot-mauve: rgba(175, 145, 255, 0.95);
+  --dot-red: rgba(150, 220, 255, 0.95);
 }
 
 * { box-sizing: border-box; }
@@ -43,7 +43,10 @@ main, footer { position: relative; }
   z-index: 2;
   pointer-events: none;
   overflow: hidden;
+  animation: firefly-apparition 0.8s ease-out both;
 }
+
+@keyframes firefly-apparition { from { opacity: 0; } to { opacity: 1; } }
 
 .fireflies span {
   position: absolute;
@@ -51,22 +54,36 @@ main, footer { position: relative; }
   top: var(--y);
   width: var(--size);
   height: var(--size);
-  border-radius: 50%;
-  background: var(--color);
-  box-shadow: 0 0 14px 4px var(--color);
   opacity: 0;
   animation: firefly-drift var(--dur) ease-in-out infinite;
   animation-delay: var(--delay);
 }
 
+/* Le point lui-même pulse à son propre rythme : son intensité monte et descend pendant qu'il dérive. */
+.fireflies span::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--color);
+  box-shadow: 0 0 16px 4px var(--color);
+  animation: firefly-pulse var(--pulse) ease-in-out infinite alternate;
+  animation-delay: var(--pulse-delay);
+}
+
 @keyframes firefly-drift {
   0%   { transform: translate(0, 0) scale(0.85); opacity: 0; }
-  15%  { opacity: 0.8; }
+  15%  { opacity: 1; }
   30%  { transform: translate(var(--tx), var(--ty)) scale(1.05); }
   50%  { transform: translate(var(--tx2), var(--ty2)) scale(1.1); opacity: 1; }
-  70%  { transform: translate(var(--tx3), var(--ty3)) scale(1.02); opacity: 0.6; }
-  85%  { opacity: 0.33; }
+  70%  { transform: translate(var(--tx3), var(--ty3)) scale(1.02); opacity: 0.85; }
+  85%  { opacity: 0.5; }
   100% { transform: translate(0, 0) scale(0.85); opacity: 0; }
+}
+
+@keyframes firefly-pulse {
+  0%   { opacity: 0.15; transform: scale(0.8); }
+  100% { opacity: 0.6; transform: scale(1.1); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -180,10 +197,12 @@ nav > a:hover, .menu-trigger:hover, .has-menu:focus-within .menu-trigger { color
 
 .hero-content {
   position: relative;
-  z-index: 3;
   width: 100%;
   padding: 18vh var(--gutter) 8vh;
 }
+/* Pas de z-index sur .hero-content : il créerait un bloc de superposition qui empêcherait le bouton « Demander un devis » (.hero-actions, z-index 30)
+   de passer devant l'en-tête (z-index 20). Les textes restent au-dessus des lucioles (z-index 2) grâce à leur propre z-index. */
+.hero-content > :not(.hero-bottom), .hero-bottom > :not(.hero-actions) { position: relative; z-index: 3; }
 .page-hero .hero-content { padding-top: 24vh; }
 
 .eyebrow-pill {
@@ -419,6 +438,8 @@ footer p { margin: 8px 0 0; max-width: 320px; }
 .footer-links a { text-decoration: none; }
 .footer-links a { color: rgba(255, 255, 255, 0.82); }
 .footer-links a:hover { color: var(--vif); }
+.footer-sep { flex-basis: 100%; height: 0; }
+.footer-projets { color: rgba(255, 255, 255, 0.6); }
 .footer-copy { grid-column: 1 / -1; padding-top: 22px; border-top: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.6); font-size: 0.8rem; display: flex; justify-content: space-between; gap: 20px; }
 .footer-copy a { text-decoration: none; }
 
@@ -585,3 +606,8 @@ nav > a:not(.nav-devis)::after, .menu-trigger::after { left: 10px; right: 10px; 
 /* Pied de page : mention de l'auteur des images (licence Magnific, ex-Freepik), lien souligné et lisible */
 .footer-copy span a { text-decoration: underline; text-underline-offset: 3px; }
 .footer-copy a:hover { color: var(--vif); }
+
+/* Apparition au défilement : site.js pose .rv sur les blocs de chaque section, puis .vu quand ils entrent à l'écran
+   (et retire les deux classes à la fin). Sans script (pas de classe .js) ou avec « réduire les animations », tout reste visible. */
+.js .rv { opacity: 0; transform: translateY(70px); }
+.js .rv.vu { opacity: 1; transform: none; transition: opacity 0.6s ease-out var(--rv-delai, 0s), transform 1s cubic-bezier(0.16, 1, 0.3, 1) var(--rv-delai, 0s); }

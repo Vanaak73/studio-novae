@@ -1,0 +1,57 @@
+/* Page Contact et devis : copie de la page « Contact » de la maquette bleu nuit (.superpowers/maquettes/design-site-v2-bleu-nuit).
+   Limité à .mq ; l'en-tête, le pied de page et les variables de base viennent de style.css et maquette.css. */
+
+/* Pas de héros sur cette page : l'en-tête reste bleu nuit en permanence et le contenu démarre sous lui. */
+.page-contact .site-header { background: rgba(10, 18, 48, 0.9); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 1px 0 rgba(238, 241, 250, 0.12); padding-top: 18px; padding-bottom: 18px; }
+.page-contact .mq { padding-top: 76px; --sur-turquoise: #08123a; }
+.mq .page-contact-titre { font: 500 clamp(2.2rem, 4.4vw, 3.6rem)/1.1 var(--titre); letter-spacing: -0.02em; margin: 0; }
+.mq .tete-section { max-width: 58ch; }
+
+.mq .duo-contact { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+.mq .onglets { display: inline-flex; padding: 4px; background: #e1e6f4; border-radius: 999px; margin-bottom: 26px; }
+.mq .onglets button { border: 0; background: transparent; min-height: 44px; padding: 0 24px; border-radius: 999px; font: 600 .98rem var(--texte); color: var(--gris); cursor: pointer; }
+.mq .onglets button[aria-selected="true"] { background: var(--blanc); color: var(--encre); box-shadow: 0 1px 3px rgba(0, 0, 0, .12); }
+.mq .carte { background: var(--blanc); border: 1px solid var(--trait); border-radius: 18px; padding: clamp(18px, 3vw, 36px); }
+.mq .bloc-form { display: grid; gap: 14px; padding-bottom: 28px; margin-bottom: 28px; border-bottom: 1px solid var(--trait); }
+.mq .bloc-form:last-of-type { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
+.mq .bloc-form h3 { display: flex; align-items: center; gap: 12px; }
+.mq .bloc-form h3 b { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--turquoise-texte); color: var(--turquoise-texte); font: 500 .95rem var(--titre); }
+.mq .choix { display: flex; flex-wrap: wrap; gap: 10px; }
+.mq .choix input { position: absolute; opacity: 0; pointer-events: none; }
+.mq .choix label { display: inline-flex; align-items: center; min-height: 48px; padding: 0 20px; border: 1.5px solid var(--trait); border-radius: 999px; font-weight: 600; cursor: pointer; background: var(--blanc); transition: border-color .15s, background .15s; }
+.mq .choix label:hover { border-color: var(--turquoise-texte); }
+.mq .choix input:checked + label { background: #e4eafd; border-color: var(--turquoise-texte); color: var(--sur-turquoise); }
+.mq .choix input:focus-visible + label { outline: 3px solid var(--turquoise); outline-offset: 2px; }
+.mq .groupe-titre { font-size: .93rem; color: var(--gris); margin-top: 4px; }
+.mq .champ { display: grid; gap: 6px; font-weight: 600; font-size: .95rem; }
+.mq .champ input, .mq .champ textarea, .mq .champ select { font: 400 1.0625rem var(--texte); min-height: 50px; padding: 12px 14px; border: 1.5px solid #b9c2dc; border-radius: 10px; background: #fff; color: var(--encre); width: 100%; }
+.mq .champ textarea { min-height: 130px; resize: vertical; }
+.mq .champ input:focus, .mq .champ textarea:focus, .mq .champ select:focus { outline: 3px solid var(--turquoise); outline-offset: 1px; border-color: var(--turquoise-texte); }
+.mq .deux { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.mq .case { display: flex; gap: 12px; align-items: flex-start; font-weight: 500; line-height: 1.45; }
+.mq .case input { width: 22px; height: 22px; margin-top: 2px; accent-color: var(--turquoise-texte); }
+.mq .resume { position: sticky; top: 94px; background: var(--nuit); color: #fff; border-radius: 18px; padding: clamp(20px, 3vw, 32px); display: grid; gap: 18px; }
+.mq .resume h3 { font-weight: 400; }
+.mq .resume dl { margin: 0; display: grid; gap: 14px; }
+.mq .resume dt { font-size: .88rem; color: rgba(255, 255, 255, .62); }
+.mq .resume dd { margin: 2px 0 0; font-weight: 500; }
+.mq .resume .vide { color: rgba(255, 255, 255, .55); font-weight: 400; }
+.mq .resume hr { border: 0; border-top: 1px solid rgba(255, 255, 255, .14); width: 100%; margin: 0; }
+.mq .resume .lien { color: var(--turquoise); }
+.mq .petit { font-size: .9rem; color: var(--gris); }
+.mq .panneau[hidden] { display: none; }
+
+/* Messages du formulaire (erreur de saisie, confirmation d'envoi) */
+.mq .msg-form { margin: 0; padding: 12px 16px; border-radius: 10px; font-weight: 600; font-size: .95rem; }
+.mq .msg-form[hidden] { display: none; }
+.mq .msg-form.erreur { background: #fdecef; color: #8a1230; border: 1px solid #f3b8c3; }
+.mq .msg-form.ok { background: #e8f6e0; color: #1f4d0f; border: 1px solid #b9dfa4; line-height: 1.5; }
+
+@media (max-width: 980px) {
+  .mq .duo-contact { grid-template-columns: 1fr; }
+  .mq .resume { position: static; }
+}
+@media (max-width: 650px) {
+  .mq .deux { grid-template-columns: 1fr; }
+  .mq .carte { padding: 16px 12px; }
+}

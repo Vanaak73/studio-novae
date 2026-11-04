@@ -5,7 +5,8 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=10000
 
-COPY package.json server.js ./
+COPY package.json package-lock.json server.js ./
+RUN npm ci --omit=dev
 COPY src/ ./src/
 COPY public_html/ ./public_html/
 

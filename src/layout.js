@@ -1,5 +1,5 @@
 // Gabarit commun : <head> (SEO, partage), en-tête, pied de page. Chaque page fournit son contenu <main>.
-const { DOMAINE, MAIL, DEVIS, esc, SERVICES, urlService } = require('./site');
+const { DOMAINE, MAIL, DEVIS, esc, SERVICES, urlService, REALISATIONS_VISIBLES, PROJETS } = require('./site');
 
 const ICONE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a1230'/%3E%3Cpath d='M18 48V16l28 32V16' fill='none' stroke='%23a8dc5a' stroke-width='6' stroke-linejoin='round'/%3E%3C/svg%3E";
 const POLICES = 'https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;500;700&display=swap';
@@ -9,7 +9,7 @@ const POLICES_ACCUEIL = POLICES.replace('Space+Grotesk:wght@300;500;700', 'Space
 
 const liensServices = () => SERVICES.map((s) => `<a href="${urlService(s.slug)}">${esc(s.nom)}</a>`);
 
-function tete({ titre, description, url, jsonld, ogImage, couleur = '#0a1230', feuilles = [], polices = POLICES }) {
+function tete({ titre, description, url, jsonld, ogImage, couleur = '#0a1230', feuilles = [], polices = POLICES, precharger = [] }) {
   const image = ogImage ? [
     `  <meta property="og:image" content="${DOMAINE}/assets/images/og/${ogImage}" />`,
     '  <meta property="og:image:width" content="1200" />',
@@ -40,11 +40,15 @@ function tete({ titre, description, url, jsonld, ogImage, couleur = '#0a1230', f
     `  <meta name="twitter:description" content="${esc(description)}" />`,
     ...twitterImage,
     `  <script type="application/ld+json">${JSON.stringify(jsonld)}</script>`,
+    "  <script>document.documentElement.classList.add('js');</script>",
     '  <link rel="stylesheet" href="/assets/css/style.css" />',
     ...feuilles.map((f) => `  <link rel="stylesheet" href="/assets/css/${f}" />`),
+    ...precharger.map((i) => `  <link rel="preload" as="image" href="${i.href}" media="${i.media}" fetchpriority="high" />`),
     '  <link rel="preconnect" href="https://fonts.googleapis.com" />',
     '  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />',
-    `  <link href="${polices}" rel="stylesheet" />`,
+    // Polices chargées sans bloquer l'affichage (display=swap) ; <noscript> en repli.
+    `  <link rel="preload" as="style" href="${polices}" onload="this.onload=null;this.rel='stylesheet'" />`,
+    `  <noscript><link href="${polices}" rel="stylesheet" /></noscript>`,
     '</head>',
   ].join('\n');
 }
@@ -58,10 +62,10 @@ const entete = () => `  <header class="site-header">
           ${liensServices().join('\n          ')}
         </div>
       </div>
-      <a href="/#realisations">Réalisations</a>
+      ${REALISATIONS_VISIBLES ? '<a href="/#realisations">Réalisations</a>' : ''}
       <a href="/#methode">Méthode</a>
       <a href="/a-propos.html">À propos</a>
-      <a class="nav-contact" href="mailto:${MAIL}">Nous contacter</a>
+      <a class="nav-contact" href="/contact.html">Nous contacter</a>
       <a class="btn-devis nav-devis" href="${DEVIS}">Demander un devis</a>
     </nav>
   </header>`;
@@ -73,6 +77,9 @@ const pied = () => `  <footer>
     </div>
     <div class="footer-links">
       ${[...liensServices(), '<a href="/a-propos.html">À propos</a>', '<a href="/aide-creation-site-web/">Aides à la création de site</a>', `<a href="mailto:${MAIL}">Contact</a>`].join('\n      ')}
+      <span class="footer-sep"></span>
+      <span class="footer-projets">Projets en ligne :</span>
+      ${PROJETS.map((p) => `<a href="${p.url}" target="_blank" rel="noopener">${esc(p.nom)}</a>`).join("\n      ")}
     </div>
     <div class="footer-copy"><span>© 2026 Studio Novae</span><span>Images : <a href="https://www.magnific.com/" target="_blank" rel="noopener">Designed by Magnific</a></span><a href="#top">Retour en haut ↑</a></div>
   </footer>`;
