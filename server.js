@@ -1,13 +1,14 @@
 // Serveur Node de Studio Novae, sans dépendance. Les pages sont générées en mémoire (src/), au démarrage puis
 // toutes les 24 h en arrière-plan ; public_html/assets/ contient uniquement les fichiers (css, js, images).
 // Variables : PORT (défaut 10000), NOINDEX ("0" pour la production, sinon l'aperçu n'est pas indexé).
-require('./src/env').charger(); // réglages du fichier .env (jamais versionné) avant de lire process.env
+require('./src/env').chargerTout(); // réglages de .env.local puis .env (jamais versionnés) avant de lire process.env
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
 const rendu = require('./src/rendu');
 const apiContact = require('./src/api-contact');
+const admin = require('./src/admin');
 
 const PORT = Number(process.env.PORT) || 10000;
 const NOINDEX = process.env.NOINDEX !== '0';
@@ -73,6 +74,8 @@ function fichierSimple(fichier) {
 const serveur = http.createServer((req, res) => {
   // Seule route qui accepte POST : le formulaire de la page Contact
   if (String(req.url).split('?')[0] === '/api/contact') return apiContact.traiter(req, res);
+  // Administration (connexion requise, absente sans SESSION_SECRET)
+  if (/^\/admin(\/|$|\?)/.test(String(req.url))) return admin.traiter(req, res);
 
   if (req.method !== 'GET' && req.method !== 'HEAD') {
     return envoyer(res, 405, 'Méthode non autorisée', { Allow: 'GET, HEAD' });

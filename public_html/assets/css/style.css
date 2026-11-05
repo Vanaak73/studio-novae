@@ -82,8 +82,8 @@ main, footer { position: relative; }
 }
 
 @keyframes firefly-pulse {
-  0%   { opacity: 0.15; transform: scale(0.8); }
-  100% { opacity: 0.6; transform: scale(1.1); }
+  0%   { opacity: 0.25; transform: scale(0.8); }
+  100% { opacity: 0.8; transform: scale(1.1); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -215,6 +215,8 @@ nav > a:hover, .menu-trigger:hover, .has-menu:focus-within .menu-trigger { color
   color: #fff;
   backdrop-filter: blur(6px);
 }
+/* Accueil, ordinateur : fond bleu nuit et texte 2 px plus grand (13,6 → 15,6 px) ; téléphone et pages de service inchangés. */
+@media (min-width: 651px) { .hero .eyebrow-pill { background: rgba(10, 18, 48, 0.5); font-size: 0.975rem; } }
 
 .hero h1, .page-hero h1 {
   max-width: 980px;

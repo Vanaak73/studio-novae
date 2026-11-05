@@ -62,4 +62,4 @@ async function noterCourriel(id, etat, erreur) {
   await pool().execute(SQL_STATUT, [etat, erreur ? String(erreur).slice(0, 300) : null, id]);
 }
 
-module.exports = { inserer, noterCourriel, estConfiguree, configuration, SQL_TABLE, SQL_INSERT, SQL_STATUT, _remplacerPilote: (f) => { fabrique = f; reserve = null; tablePrete = null; } };
+module.exports = { pool, inserer, noterCourriel, estConfiguree, configuration, SQL_TABLE, SQL_INSERT, SQL_STATUT, _remplacerPilote: (f) => { fabrique = f; reserve = null; tablePrete = null; } };

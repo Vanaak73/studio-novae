@@ -11,13 +11,19 @@
     "test:demarrage": "node scripts/test-demarrage.js",
     "test:contact": "node scripts/test-contact.js",
     "test:base": "node scripts/test-base.js",
+    "test:conversations": "node scripts/test-conversations.js",
+    "test:releve": "node scripts/test-releve.js",
+    "test:admin": "node scripts/test-admin.js",
     "controle": "node scripts/controle-site.js",
-    "controle:prod": "node scripts/controle-site.js --prod"
+    "controle:prod": "node scripts/controle-site.js --prod",
+    "test:tout": "npm test && npm run test:demarrage && npm run test:contact && npm run test:base && npm run test:conversations && npm run test:releve && npm run test:admin"
   },
   "engines": {
     "node": ">=20"
   },
   "dependencies": {
+    "imapflow": "^2.10.2",
+    "mailparser": "^3.14.2",
     "mysql2": "^3.24.6"
   }
 }

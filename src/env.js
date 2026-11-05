@@ -26,4 +26,10 @@ function charger(fichier = path.join(__dirname, '..', '.env')) {
   return lues;
 }
 
-module.exports = { charger, analyser };
+// .env.local (réglages propres à un poste, non versionné) est lu AVANT .env : ses variables l'emportent. Absent chez l'hébergeur.
+function chargerTout() {
+  const racine = path.join(__dirname, '..');
+  return [...charger(path.join(racine, '.env.local')), ...charger(path.join(racine, '.env'))];
+}
+
+module.exports = { charger, chargerTout, analyser };

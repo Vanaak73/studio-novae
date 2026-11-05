@@ -153,6 +153,76 @@ const lignes = (fichier) => (fs.existsSync(fichier) ? fs.readFileSync(fichier, '
   ok('SMTP en panne : le visiteur voit un succès, la demande est gardée, l\'échec est consigné', r.code === 200 && l3[0] && l3.some((x) => x.courriel === 'echec'), JSON.stringify(l3.slice(-1)));
   site3.enfant.kill();
 
+  // --- courriel sortant : réponse à un client (destinataire libre, en-têtes de réponse, pièces jointes)
+  {
+    const courriel = require('../src/courriel');
+    const base64 = (t) => Buffer.from(t, 'utf8').toString('base64');
+    const simple = courriel.construireMessage({ de: 'contact@studionovae.org', a: 'client@exemple.fr', sujet: 'Re: Votre demande', texte: 'Bonjour' });
+    ok('courriel : sans pièce jointe, message text/plain en base64 (comportement inchangé)', /^Content-Type: text\/plain; charset=UTF-8$/m.test(simple) && !/multipart/.test(simple) && simple.includes(base64('Bonjour')));
+    const reponse = courriel.construireMessage({ de: 'contact@studionovae.org', a: 'client@exemple.fr', sujet: 'Re: x', texte: 'ok', enReponseA: '<abc@client.fr>', references: ['<un@x>', '<abc@client.fr>'], messageId: '<fixe@studionovae.org>' });
+    ok('courriel : en-têtes In-Reply-To, References et Message-ID posés', /^In-Reply-To: <abc@client\.fr>$/m.test(reponse) && /^References: <un@x> <abc@client\.fr>$/m.test(reponse) && /^Message-ID: <fixe@studionovae\.org>$/m.test(reponse));
+    const avecPj = courriel.construireMessage({ de: 'contact@studionovae.org', a: 'client@exemple.fr', sujet: 'Devis', texte: 'Voici', pieces: [{ nom: 'dev"is\r\nBcc: x@y.fr.pdf', typeMime: 'application/pdf', contenu: Buffer.from('%PDF-1.4 test') }] });
+    const entetes = avecPj.split('\r\n\r\n')[0];
+    const frontiere = (entetes.match(/boundary="([^"]+)"/) || [])[1];
+    ok('courriel : avec pièce jointe, multipart/mixed avec frontière, texte et pièce en base64', /^Content-Type: multipart\/mixed; boundary=/m.test(entetes) && frontiere && avecPj.includes('--' + frontiere + '--') && avecPj.includes(base64('Voici')) && avecPj.includes(Buffer.from('%PDF-1.4 test').toString('base64')));
+    ok('courriel : nom de pièce jointe avec retour à la ligne ou guillemets assaini', !/^Bcc:/m.test(avecPj) && /Content-Disposition: attachment; filename="[^"\r\n]*"/.test(avecPj));
+    let refuse = false;
+    try { courriel.construireMessage({ de: 'contact@studionovae.org', a: 'client@exemple.fr\r\nBcc: v@x.fr', sujet: 's', texte: 't' }); } catch { refuse = true; }
+    ok('courriel : destinataire avec retour à la ligne refusé', refuse);
+    const cfg = { hote: '127.0.0.1', port: smtp.port, securise: false, utilisateur: 'contact@studionovae.org', motDePasse: 'x', destinataire: 'contact@studionovae.org' };
+    const avantCmd = smtp.recu.commandes.length;
+    const envoye = await courriel.envoyer({ sujet: 'Re: Votre demande', texte: 'Bonjour', a: 'client@exemple.fr', enReponseA: '<abc@client.fr>' }, cfg);
+    ok('courriel : envoyer livre au destinataire donné et renvoie le Message-ID posé dans l\'en-tête', smtp.recu.commandes.slice(avantCmd).includes('RCPT TO:<client@exemple.fr>') && /^<[^<>\s]+@studionovae\.org>$/.test(envoye.messageId) && envoye.brut.includes('Message-ID: ' + envoye.messageId));
+  }
+
+  // --- mail de réponse en HTML (gabarit validé par Rémi : en-tête bleu nuit, trait vert, signature, pied de page)
+  {
+    const courriel = require('../src/courriel');
+    const html = courriel.htmlReponse('Bonjour Claire,\n\nVoici ma proposition.\nÀ bientôt.\n\n<script>alert(1)</script> & "guillemets"');
+    const nb = (t, motif) => (t.match(motif) || []).length;
+    ok('gabarit : logo « STUDIO · NOVAE » avec point vert vif, gras 700, interlettrage 0.04em (logo de l\'accueil)', /STUDIO <span style="[^"]*color:#a8dc5a[^"]*">·<\/span> NOVAE/.test(html) && /font-weight:700/.test(html) && /letter-spacing:0\.04em/.test(html));
+    ok('gabarit : ligne de métier dans l\'en-tête ET dans le pied de page, trait vert sous l\'en-tête', nb(html, /Développement web, automatisation, marketing digital et conseil/g) === 2 && /background(-color)?:#a8dc5a|bgcolor="#a8dc5a"/.test(html));
+    ok('gabarit : signature « Rémi » avec « Studio Novae · studionovae.org » et trait vertical gris-bleu devant', /Rémi/.test(html) && /border-left:4px solid #d5dbec/.test(html) && /Studio Novae · <a [^>]*>studionovae\.org<\/a>/.test(html));
+    ok('gabarit : pied de page « studionovae.org · contact@studionovae.org »', /studionovae\.org<\/a> · <a [^>]*>contact@studionovae\.org/.test(html));
+    ok('gabarit : le texte du message est échappé (aucune balise reçue n\'est interprétée), retours à la ligne conservés', !/<script>/.test(html) && /&lt;script&gt;alert\(1\)&lt;\/script&gt; &amp; &quot;guillemets&quot;/.test(html) && /Voici ma proposition\.<br \/>À bientôt\./.test(html));
+    const alternative = courriel.construireMessage({ de: 'contact@studionovae.org', a: 'client@exemple.fr', sujet: 'Re: x', texte: 'Bonjour', html: '<p>Bonjour</p>' });
+    const entetesAlt = alternative.split('\r\n\r\n')[0];
+    ok('courriel : texte + HTML → multipart/alternative avec les deux parties en base64', /^Content-Type: multipart\/alternative; boundary="/m.test(entetesAlt) && alternative.includes('Content-Type: text/plain; charset=UTF-8') && alternative.includes('Content-Type: text/html; charset=UTF-8') && alternative.includes(Buffer.from('<p>Bonjour</p>').toString('base64')));
+    const mixte = courriel.construireMessage({ de: 'contact@studionovae.org', a: 'client@exemple.fr', sujet: 'Devis', texte: 'Voici', html: '<p>Voici</p>', pieces: [{ nom: 'devis.pdf', typeMime: 'application/pdf', contenu: Buffer.from('%PDF') }] });
+    ok('courriel : texte + HTML + pièce jointe → multipart/mixed contenant multipart/alternative puis la pièce', /^Content-Type: multipart\/mixed; boundary="/m.test(mixte.split('\r\n\r\n')[0]) && /Content-Type: multipart\/alternative; boundary="/.test(mixte) && mixte.indexOf('multipart/alternative') < mixte.indexOf('application/pdf') && /filename="devis\.pdf"/.test(mixte));
+    const frontieres = [...mixte.matchAll(/boundary="([^"]+)"/g)].map((m) => m[1]);
+    ok('courriel : une frontière différente pour chaque niveau', frontieres.length === 2 && frontieres[0] !== frontieres[1]);
+  }
+
+  // --- rattachement à la conversation du client (faux pilote MySQL qui consigne les requêtes)
+  {
+    const base = require('../src/base');
+    const apiContact = require('../src/api-contact');
+    const demandeTest = { id: 'abc123def456', recueLe: new Date().toISOString(), ip: '1.2.3.4', type: 'devis', nom: 'Claire Martin', mail: 'Claire@Boulangerie.fr', services: ['Site vitrine'], besoin: 'Boulangerie', delai: '', aide: false };
+    const fauxPilote = (panneMessage) => {
+      const requetes = [];
+      const reponseA = (sql) => {
+        requetes.push(sql);
+        if (panneMessage && /^INSERT INTO message/.test(sql)) throw new Error('panne simulée');
+        if (/^INSERT INTO message/.test(sql)) return [{ insertId: 9 }];
+        if (/FROM message/.test(sql)) return [[]];
+        if (/FROM utilisateur|FROM conversation/.test(sql)) return [[{ id: 7, email: 'claire@boulangerie.fr' }]];
+        return [[]];
+      };
+      return { requetes, query: async (sql) => reponseA(sql), execute: async (sql) => reponseA(sql) };
+    };
+    const pilote = fauxPilote(false);
+    base._remplacerPilote(() => pilote);
+    const resultat = await apiContact.enregistrerBase(demandeTest);
+    ok('rattachement : la demande enregistrée est ajoutée à la conversation du client', resultat === true && pilote.requetes.some((s) => /^INSERT INTO message/.test(s)));
+    const pilotePanne = fauxPilote(true);
+    base._remplacerPilote(() => pilotePanne);
+    let enregistree = null;
+    try { enregistree = await apiContact.enregistrerBase(demandeTest); } catch { enregistree = 'exception'; }
+    ok('rattachement : une panne du rattachement laisse la demande enregistrée (aucune erreur remontée)', enregistree === true);
+    base._remplacerPilote(null);
+  }
+
   smtp.serveur.close();
   console.log(echecs ? `\n✗ ${echecs} échec(s)` : '\n✓ envoi des demandes conforme');
   process.exit(echecs ? 1 : 0);

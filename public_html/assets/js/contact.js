@@ -1,9 +1,6 @@
 // Page Contact et devis : onglets, récapitulatif en direct, présélection du service (?service=slug) et envoi.
-// ENVOI_PAR_SERVEUR = false : la messagerie du visiteur s'ouvre avec le message prêt (mailto), en attendant que la boîte contact@studionovae.org,
-// la base MySQL et le fichier .env soient branchés. À passer à true pour envoyer au serveur (POST /api/contact, déjà en place et testé).
 (function () {
   var MAIL = 'contact@studionovae.org';
-  var ENVOI_PAR_SERVEUR = false;
   var $ = function (s) { return document.querySelector(s); };
   var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
   if (!$('#form-devis')) return;
@@ -46,34 +43,52 @@
     var e = $(id); e.textContent = texte; e.hidden = false;
     if (champ) champ.focus();
   }
-  // Envoi par la messagerie du visiteur : sujet et corps composés à partir des champs.
-  function lienMailto(d) {
-    var sujet, corps;
-    if (d.type === 'question') {
-      sujet = 'Question de ' + d.nom;
-      corps = ['Bonjour,', '', d.message, '', 'Nom : ' + d.nom, 'E-mail : ' + d.mail].join('\n');
-    } else {
-      sujet = 'Demande de devis : ' + d.services.join(', ');
-      corps = [
-        'Bonjour,', '',
-        'Je souhaite un devis pour : ' + d.services.join(', '), '',
-        'Mon besoin :', d.besoin, '',
-        'Démarrage souhaité : ' + (d.delai || 'non précisé'),
-        'Aides au financement : ' + (d.aide ? 'oui, à étudier avec vous' : 'non demandé'), '',
-        'Nom : ' + d.nom, 'E-mail : ' + d.mail, 'Téléphone : ' + (d.tel || 'non indiqué')
-      ].join('\n');
+  // Fenêtre de confirmation (popup du site, dans les couleurs du site) : Échap, clic sur le fond ou bouton « Fermer » pour la fermer.
+  function confirmation(titre, texte) {
+    var racine = document.querySelector('.mq') || document.body;
+    var precedent = document.activeElement;
+    var fond = document.createElement('div');
+    fond.className = 'popup-fond';
+    var boite = document.createElement('div');
+    boite.className = 'popup';
+    boite.setAttribute('role', 'dialog');
+    boite.setAttribute('aria-modal', 'true');
+    boite.setAttribute('aria-labelledby', 'popup-titre');
+    boite.setAttribute('aria-describedby', 'popup-texte');
+    var coche = document.createElement('span');
+    coche.className = 'popup-coche';
+    coche.setAttribute('aria-hidden', 'true');
+    coche.textContent = '✓';
+    var h = document.createElement('h2');
+    h.id = 'popup-titre';
+    h.textContent = titre;
+    var p = document.createElement('p');
+    p.id = 'popup-texte';
+    p.textContent = texte;
+    var bouton = document.createElement('button');
+    bouton.type = 'button';
+    bouton.className = 'btn btn-devis';
+    bouton.textContent = 'Fermer';
+    boite.appendChild(coche); boite.appendChild(h); boite.appendChild(p); boite.appendChild(bouton);
+    fond.appendChild(boite);
+    function fermer() {
+      document.removeEventListener('keydown', touche);
+      document.body.style.overflow = '';
+      if (fond.parentNode) fond.parentNode.removeChild(fond);
+      if (precedent && precedent.focus) precedent.focus();
     }
-    return 'mailto:' + MAIL + '?subject=' + encodeURIComponent(sujet) + '&body=' + encodeURIComponent(corps);
+    function touche(e) {
+      if (e.key === 'Escape') fermer();
+      else if (e.key === 'Tab') { e.preventDefault(); bouton.focus(); } // un seul élément actif : le focus reste dans la fenêtre
+    }
+    bouton.addEventListener('click', fermer);
+    fond.addEventListener('click', function (e) { if (e.target === fond) fermer(); });
+    document.addEventListener('keydown', touche);
+    document.body.style.overflow = 'hidden';
+    racine.appendChild(fond);
+    bouton.focus();
   }
   function envoyer(formulaire, idOk, idErreur, donnees, apres) {
-    if (!ENVOI_PAR_SERVEUR) {
-      $(idErreur).hidden = true;
-      var ouvert = $(idOk);
-      ouvert.textContent = 'Votre messagerie s’ouvre avec votre message prêt à envoyer : il suffit de l’envoyer. Si rien ne s’ouvre, copiez votre message et écrivez-nous à ' + MAIL + '.';
-      ouvert.hidden = false;
-      window.location.href = lienMailto(donnees);
-      return;
-    }
     var bouton = formulaire.querySelector('button[type=submit]');
     var libelle = bouton.textContent;
     $(idErreur).hidden = true; $(idOk).hidden = true;
@@ -85,10 +100,8 @@
       .then(function (r) { return r.json().then(function (j) { return { ok: r.ok && j.ok, message: j.erreur }; }, function () { return { ok: false }; }); })
       .then(function (res) {
         if (res.ok) {
-          var ok = $(idOk);
-          ok.textContent = 'Merci, votre message est bien parti. Nous vous répondons par e-mail rapidement.';
-          ok.hidden = false;
           formulaire.reset();
+          confirmation('Message envoyé', 'Merci, votre message est bien parti. Nous vous répondons par e-mail rapidement.');
           if (apres) apres();
         } else {
           erreur(idErreur, (res.message || 'L’envoi n’a pas abouti.') + repli);

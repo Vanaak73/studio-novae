@@ -10,6 +10,7 @@ const { MAIL } = require('./site');
 const { LIBELLES } = require('./pages/contact');
 const courriel = require('./courriel');
 const base = require('./base');
+const conversations = require('./conversations');
 
 const DOSSIER = process.env.DATA_DIR || path.join(__dirname, '..', 'data');
 const FICHIER = path.join(DOSSIER, 'demandes.jsonl');
@@ -71,6 +72,14 @@ function composerCourriel(d) {
   };
 }
 
+// Enregistre la demande dans la base puis la rattache à la conversation du client (administration). Renvoie true si la demande est en base ;
+// un échec du rattachement est consigné sans remettre en cause l'enregistrement.
+async function enregistrerBase(ligne) {
+  try { await base.inserer(ligne); } catch (e) { console.error(`Contact : demande ${ligne.id} non enregistrée dans la base :`, e.message); return false; }
+  try { await conversations.rattacherDemande(base.pool(), ligne); } catch (e) { console.error(`Contact : demande ${ligne.id} non rattachée à une conversation :`, e.message); }
+  return true;
+}
+
 function enregistrer(ligne) {
   fs.mkdirSync(DOSSIER, { recursive: true });
   fs.appendFileSync(FICHIER, JSON.stringify(ligne) + '\n', 'utf8');
@@ -106,7 +115,7 @@ function traiter(req, res) {
     try { enregistrer(ligne); } catch (e) { fichierOk = false; console.error('Contact : enregistrement dans le fichier impossible :', e.message); }
     // Base MySQL (si configurée) : en parallèle, son échec est consigné sans bloquer le visiteur tant que le fichier a fonctionné.
     const baseActive = base.estConfiguree();
-    const enBase = baseActive ? base.inserer(ligne).then(() => true, (e) => { console.error(`Contact : demande ${id} non enregistrée dans la base :`, e.message); return false; }) : Promise.resolve(false);
+    const enBase = baseActive ? enregistrerBase(ligne) : Promise.resolve(false);
 
     const cfg = courriel.configuration();
     const courrielActif = courriel.estConfigure(cfg);
@@ -141,4 +150,4 @@ function traiter(req, res) {
   });
 }
 
-module.exports = { traiter, valider, composerCourriel, FICHIER };
+module.exports = { traiter, valider, composerCourriel, enregistrerBase, FICHIER };

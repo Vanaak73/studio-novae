@@ -32,7 +32,7 @@ function construire() {
 
   const urls = [...pages.keys()];
   ajouter('/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((u) => `  <url><loc>${DOMAINE}${u}</loc></url>\n`).join('')}</urlset>\n`, 'application/xml; charset=utf-8');
-  ajouter('/robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${DOMAINE}/sitemap.xml\n`, 'text/plain; charset=utf-8');
+  ajouter('/robots.txt', `User-agent: *\nAllow: /\nDisallow: /admin/\n\nSitemap: ${DOMAINE}/sitemap.xml\n`, 'text/plain; charset=utf-8');
   return { pages, construitLe: Date.now() };
 }
 

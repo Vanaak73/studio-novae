@@ -36,7 +36,7 @@ function pageAccueil() {
       <div class="hero-bg parallax-layer" style="--img:url('/assets/images/hero-oeil-numerique.webp');--img-m:url('/assets/images/hero-oeil-numerique-mobile.webp')"></div>
       <div class="hero-overlay"></div>
       <div class="hero-content">
-        <p class="eyebrow-pill">Développement web & automatisation</p>
+        <p class="eyebrow-pill">Développement web, automatisation, marketing digital et conseil</p>
         <h1>Des outils qui travaillent<br /><em>pour vous</em></h1>
         <div class="hero-bottom">
           <p class="hero-intro">Studio Novae conçoit des sites, des outils et des automatisations faits pour votre quotidien.</p>
