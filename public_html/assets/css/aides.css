@@ -23,6 +23,14 @@ body.aides {
 .aides .nav-contact { border-bottom-color: var(--encre); }
 .aides .nav-contact span { color: var(--teal); }
 
+/* Hub (/aides-creation-digitale/) : en-tête bleu nuit à 100 % d'opacité avec flou ; logo et menu clairs pour rester lisibles sur ce fond */
+.aides-hub .site-header, .aides-hub .site-header.plein { background: rgba(10, 18, 48, 1); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 1px 0 rgba(238, 241, 250, 0.12); }
+.aides-hub .logo { color: #fff; }
+.aides-hub nav > a, .aides-hub .menu-trigger { color: #fff; opacity: .88; }
+.aides-hub nav > a:hover, .aides-hub .menu-trigger:hover, .aides-hub .has-menu:focus-within .menu-trigger { color: var(--vif); opacity: 1; }
+.aides-hub .nav-contact { border-bottom-color: #fff; }
+.aides-hub .nav-contact span { color: var(--accent); }
+
 /* Bandes */
 .aides main { background: var(--clair); }
 .az { padding: clamp(56px, 7vw, 104px) 0; }

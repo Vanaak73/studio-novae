@@ -43,11 +43,11 @@ function pageAccueil() {
           <div class="hero-actions"><a class="btn-devis" href="${DEVIS}">Demander un devis</a></div>
         </div>
       </div>
+      <div class="hero-voir"><a href="#offres">Voir les services <span>↓</span></a></div>
     </section>
 
     <div class="mq">
       <section class="section" id="services">
-        <div class="lien-offres"><a href="#offres">Voir les services <span>↓</span></a></div>
         <div class="zone-tuiles">
           <div class="tete-section">
             <h2>Six façons de faire avancer votre activité</h2>
@@ -74,7 +74,7 @@ ${METHODE.map(etape).join('\n')}
             <div class="texte">
               <h2>Des aides publiques pour financer votre site web</h2>
               <p class="chapo" style="font-size:1.1rem">L'État, les régions et les collectivités soutiennent le numérique des entreprises. Trois questions suffisent pour trouver celles de votre région.</p>
-              <div class="actions" style="margin-top:6px"><a class="btn btn-contour" href="/aide-creation-site-web/">Trouver les aides de ma région</a></div>
+              <div class="actions" style="margin-top:6px"><a class="btn btn-contour" href="/aides-creation-digitale/">Trouver les aides de ma région</a></div>
             </div>
             <img src="/assets/images/aides-echange.webp" alt="Deux personnes échangent autour d'une table de travail" width="900" height="600" loading="lazy" decoding="async" />
           </div>

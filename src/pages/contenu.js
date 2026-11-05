@@ -138,7 +138,7 @@ function pagesContenu() {
   const resultat = [];
 
   const apropos = lire('a-propos.json');
-  const urlApropos = '/a-propos.html';
+  const urlApropos = '/a-propos';
   resultat.push({
     url: urlApropos,
     html: rendre(apropos, {

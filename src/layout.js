@@ -1,5 +1,6 @@
 // Gabarit commun : <head> (SEO, partage), en-tête, pied de page. Chaque page fournit son contenu <main>.
 const { DOMAINE, MAIL, DEVIS, esc, SERVICES, urlService, REALISATIONS_VISIBLES, PROJETS } = require('./site');
+const { asset } = require('./versions');
 
 const ICONE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a1230'/%3E%3Cpath d='M18 48V16l28 32V16' fill='none' stroke='%23a8dc5a' stroke-width='6' stroke-linejoin='round'/%3E%3C/svg%3E";
 const POLICES = 'https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;500;700&display=swap';
@@ -41,8 +42,8 @@ function tete({ titre, description, url, jsonld, ogImage, couleur = '#0a1230', f
     ...twitterImage,
     `  <script type="application/ld+json">${JSON.stringify(jsonld)}</script>`,
     "  <script>document.documentElement.classList.add('js');</script>",
-    '  <link rel="stylesheet" href="/assets/css/style.css" />',
-    ...feuilles.map((f) => `  <link rel="stylesheet" href="/assets/css/${f}" />`),
+    `  <link rel="stylesheet" href="${asset('/assets/css/style.css')}" />`,
+    ...feuilles.map((f) => `  <link rel="stylesheet" href="${asset('/assets/css/' + f)}" />`),
     ...precharger.map((i) => `  <link rel="preload" as="image" href="${i.href}" media="${i.media}" fetchpriority="high" />`),
     '  <link rel="preconnect" href="https://fonts.googleapis.com" />',
     '  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />',
@@ -64,11 +65,30 @@ const entete = () => `  <header class="site-header">
       </div>
       ${REALISATIONS_VISIBLES ? '<a href="/#realisations">Réalisations</a>' : ''}
       <a href="/#methode">Méthode</a>
-      <a href="/a-propos.html">À propos</a>
-      <a class="nav-contact" href="/contact.html">Nous contacter</a>
+      <a href="/a-propos">À propos</a>
+      <a class="nav-contact" href="/contact">Nous contacter</a>
       <a class="btn-devis nav-devis" href="${DEVIS}">Demander un devis</a>
     </nav>
-  </header>`;
+    <button type="button" class="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu-mobile"><span></span><span></span><span></span></button>
+  </header>
+
+  <div class="menu-mobile" id="menu-mobile" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="menu-mobile-tete">
+      <a class="logo" href="/" aria-label="Studio Novae, accueil">STUDIO <span>·</span> NOVAE</a>
+      <button type="button" class="menu-fermer" aria-label="Fermer le menu"><span></span><span></span></button>
+    </div>
+    <nav class="menu-mobile-liens" aria-label="Menu principal">
+      <p class="menu-mobile-titre">Services</p>
+      ${liensServices().join('\n      ')}
+      <span class="menu-mobile-trait"></span>
+      ${REALISATIONS_VISIBLES ? '<a href="/#realisations">Réalisations</a>' : ''}
+      <a href="/#methode">Méthode</a>
+      <a href="/a-propos">À propos</a>
+      <a href="/aides-creation-digitale/">Aides à la création digitale</a>
+      <a href="/contact">Nous contacter</a>
+      <a class="btn-devis" href="${DEVIS}">Demander un devis</a>
+    </nav>
+  </div>`;
 
 const pied = () => `  <footer>
     <div>
@@ -76,7 +96,7 @@ const pied = () => `  <footer>
       <p>Développement web et automatisation IA, depuis la France.</p>
     </div>
     <div class="footer-links">
-      ${[...liensServices(), '<a href="/a-propos.html">À propos</a>', '<a href="/aide-creation-site-web/">Aides à la création de site</a>', `<a href="mailto:${MAIL}">Contact</a>`].join('\n      ')}
+      ${[...liensServices(), '<a href="/a-propos">À propos</a>', '<a href="/aides-creation-digitale/">Aides à la création de site</a>', `<a href="mailto:${MAIL}">Contact</a>`].join('\n      ')}
       <span class="footer-sep"></span>
       <span class="footer-projets">Projets en ligne :</span>
       ${PROJETS.map((p) => `<a href="${p.url}" target="_blank" rel="noopener">${esc(p.nom)}</a>`).join("\n      ")}
@@ -87,7 +107,7 @@ const pied = () => `  <footer>
 // Assemble une page complète. `scripts` : balises <script> placées avant </body>.
 function page({ meta, classeCorps, main, scripts }) {
   const corps = classeCorps ? `<body class="${classeCorps}">` : '<body>';
-  const js = scripts || '  <script src="/assets/js/site.js" defer></script>';
+  const js = scripts || `  <script src="${asset('/assets/js/site.js')}" defer></script>`;
   return `${tete(meta)}\n${corps}\n\n${entete()}\n\n  <main id="top">\n${main}\n  </main>\n\n${pied()}\n\n${js}\n</body>\n</html>\n`;
 }
 

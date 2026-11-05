@@ -1,4 +1,4 @@
-// Questionnaire du hub /aide-creation-site-web/ : région, ancienneté, projet. Le dernier clic mène à la page de la région.
+// Questionnaire du hub /aides-creation-digitale/ : région, ancienneté, projet. Le dernier clic mène à la page de la région.
 // Les données viennent de window.AIDES (écrit dans la page par aides-src/generer.js).
 (function () {
   var D = window.AIDES;
@@ -90,7 +90,7 @@
           etat.besoin = b.dataset.v;
           sauver(); // le retour depuis la page de la région retrouve les trois réponses
           b.classList.add('choisi');
-          location.href = '/aide-creation-site-web/' + regionDe(etat.region).slug + '/';
+          location.href = '/aides-creation-digitale/' + regionDe(etat.region).slug + '/';
         };
       });
       document.getElementById('retour').onclick = function () { aller(2); };

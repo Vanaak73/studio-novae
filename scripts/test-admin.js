@@ -53,6 +53,7 @@ async function principal() {
   const sortie = pageAdmin({ connecte: false });
   ok("page : le bouton « Nouveau message » est présent pour l'administrateur connecté seulement", /id="nouveau-message"/.test(connectee) && !/id="nouveau-message"/.test(pageAdmin({ connecte: false })));
   ok('page non connectée : formulaire de connexion seul, ni conversations ni jeton', /<form[^>]*id="connexion"/.test(sortie) && !/id="liste-conversations"/.test(sortie) && !/name="csrf"/.test(sortie));
+  ok('page d\'administration : feuille de style et script versionnés (?v=<empreinte>)', /href="\/assets\/css\/admin\.css\?v=[0-9a-f]{8}"/.test(connectee) && /src="\/assets\/js\/admin\.js\?v=[0-9a-f]{8}"/.test(connectee) && /href="\/assets\/css\/admin\.css\?v=[0-9a-f]{8}"/.test(sortie));
   ok('pages : <meta name="robots" content="noindex"> sur les deux', /<meta name="robots" content="noindex/.test(connectee) && /<meta name="robots" content="noindex/.test(sortie));
   ok('page : un e-mail hostile est échappé dans la page', !/<script>alert/.test(pageAdmin({ connecte: true, csrf: 'x', email: '<script>alert(1)</script>' })));
   const scriptAdmin = fs.readFileSync(path.join(__dirname, '..', 'public_html', 'assets', 'js', 'admin.js'), 'utf8');

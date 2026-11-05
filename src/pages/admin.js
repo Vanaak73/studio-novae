@@ -1,6 +1,7 @@
 // Page d'administration (/admin/) : connexion, puis conversations. Document autonome (feuille admin.css, script admin.js), jamais indexé.
 // Le contenu des conversations arrive par l'API et s'affiche côté navigateur via textContent ; cette page ne contient aucune donnée de client.
 const { esc } = require('../site');
+const { asset } = require('../versions');
 
 const POLICES = 'https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;700&display=swap';
 
@@ -22,7 +23,7 @@ const tete = (csrf) => `<!DOCTYPE html>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="${POLICES}" />
-  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="${asset('/assets/css/admin.css')}" />
 </head>`;
 
 const entete = (connecte, email) => `  <header class="adm-entete">
@@ -80,7 +81,7 @@ function pageAdmin({ connecte = false, csrf = '', email = '' } = {}) {
     '<body class="adm">',
     entete(connecte, email),
     connecte ? conversations() : connexion(),
-    `  <script src="/assets/js/admin.js" defer></script>`,
+    `  <script src="${asset('/assets/js/admin.js')}" defer></script>`,
     '</body>',
     '</html>',
     '',

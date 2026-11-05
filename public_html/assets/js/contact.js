@@ -101,7 +101,7 @@
       .then(function (res) {
         if (res.ok) {
           formulaire.reset();
-          confirmation('Message envoyé', 'Merci, votre message est bien parti. Nous vous répondons par e-mail rapidement.');
+          confirmation('Message envoyé', 'Merci, votre message a bien été envoyé. Nous vous répondons par e-mail très rapidement.');
           if (apres) apres();
         } else {
           erreur(idErreur, (res.message || 'L’envoi n’a pas abouti.') + repli);

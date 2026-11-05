@@ -68,8 +68,10 @@
         });
       };
       decouperDc(titreDc);
-      // Déroulé : 1 s d'attente, un curseur clignote (CLIGNOTEMENTS_DEBUT fois), puis les lettres sont déchiffrées UNE À UNE (le curseur avance), enfin le curseur clignote (CLIGNOTEMENTS_FIN fois) et disparaît.
-      var ATTENTE = 1000, CLIGNOTE_ON = 880, CLIGNOTE_OFF = 880, PAR_LETTRE = 90, CLIGNOTEMENTS_DEBUT = 1, CLIGNOTEMENTS_FIN = 5;
+      // Déroulé : 1 s d'attente, un curseur clignote (CLIGNOTEMENTS_DEBUT fois ; aucune fois sur téléphone), puis les lettres sont déchiffrées UNE À UNE (le curseur avance), enfin le curseur clignote (CLIGNOTEMENTS_FIN fois) et disparaît.
+      // Sur téléphone (650 px et moins), le déroulé est deux fois plus rapide : attente, clignotements et lettres deux fois plus courts, 2 clignotements finaux au lieu de 5.
+      var tel = window.matchMedia('(max-width: 650px)').matches;
+      var ATTENTE = tel ? 500 : 1000, CLIGNOTE_ON = tel ? 440 : 880, CLIGNOTE_OFF = tel ? 440 : 880, PAR_LETTRE = tel ? 45 : 90, CLIGNOTEMENTS_DEBUT = tel ? 0 : 1, CLIGNOTEMENTS_FIN = tel ? 2 : 5;
       var lancerDc = function () {
         // Largeur de chaque lettre figée avant l'effet : le titre ne bouge pas.
         lettresDc.forEach(function (l) { l.w = l.el.getBoundingClientRect().width; });
@@ -131,7 +133,28 @@
         };
         window.requestAnimationFrame(image);
       };
-      (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(lancerDc);
+      // Les polices viennent d'une feuille Google Fonts chargée en différé : document.fonts.ready répond avant qu'elle soit appliquée. La largeur de chaque lettre
+      // serait alors mesurée avec la police de repli, puis figée : les lettres de Space Grotesk se retrouveraient collées ou irrégulièrement espacées.
+      // On attend donc la feuille, puis la police elle-même (2,5 s au plus : au-delà, le titre démarre quand même).
+      var attendrePolice = function () {
+        return new Promise(function (resolve) {
+          var fini = false;
+          var fin = function () { if (!fini) { fini = true; resolve(); } };
+          setTimeout(fin, 2500);
+          var apresFeuille = function () {
+            if (!document.fonts || !document.fonts.load) { fin(); return; }
+            Promise.all([document.fonts.load('300 1em "Space Grotesk"'), document.fonts.load('500 1em "Space Grotesk"')])
+              .then(function () { return document.fonts.ready; }).then(fin, fin);
+          };
+          var feuille = document.querySelector('link[href*="fonts.googleapis.com/css2"]');
+          var attendre = function () {
+            if (fini) return;
+            if (feuille.rel === 'stylesheet' && feuille.sheet) apresFeuille(); else setTimeout(attendre, 50); // d'abord « preload », puis « stylesheet »
+          };
+          if (feuille) attendre(); else apresFeuille();
+        });
+      };
+      attendrePolice().then(lancerDc);
     }
   }
 
@@ -343,4 +366,48 @@
     var id = decodeURIComponent(u.hash.slice(1));
     aller(id === 'top' ? '' : id);
   });
+})();
+
+// Menu burger (650 px et moins) : le bouton de l'en-tête ouvre le panneau plein écran, la croix, la touche Échap ou un clic sur un lien le ferment.
+(function () {
+  var burger = document.querySelector('.burger');
+  var menu = document.getElementById('menu-mobile');
+  if (!burger || !menu) return;
+  var racine = document.documentElement;
+  var fermer = menu.querySelector('.menu-fermer');
+  menu.setAttribute('tabindex', '-1');
+  var ouvert = function () { return menu.classList.contains('ouvert'); };
+  var ouvrir = function () {
+    menu.classList.add('ouvert');
+    racine.classList.add('menu-ouvert');
+    burger.setAttribute('aria-expanded', 'true');
+    burger.setAttribute('aria-label', 'Fermer le menu');
+    menu.focus(); // le panneau reçoit le focus (Tab passe ensuite d'un lien à l'autre, sans cadre sur la croix)
+  };
+  var clore = function (rendreFocus) {
+    menu.classList.remove('ouvert');
+    racine.classList.remove('menu-ouvert');
+    burger.setAttribute('aria-expanded', 'false');
+    burger.setAttribute('aria-label', 'Ouvrir le menu');
+    if (rendreFocus) burger.focus();
+  };
+  burger.addEventListener('click', function () { if (ouvert()) clore(true); else ouvrir(); });
+  if (fermer) fermer.addEventListener('click', function () { clore(true); });
+  menu.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href]');
+    if (a) clore(false); // un lien vers une ancre de la page courante se défile ensuite normalement
+  });
+  document.addEventListener('keydown', function (e) {
+    if (!ouvert()) return;
+    if (e.key === 'Escape') { clore(true); return; }
+    if (e.key !== 'Tab') return;
+    // le focus reste dans le panneau tant qu'il est ouvert
+    var cibles = Array.prototype.slice.call(menu.querySelectorAll('a[href], button')).filter(function (c) { return c.offsetParent !== null; });
+    if (!cibles.length) return;
+    var premier = cibles[0], dernier = cibles[cibles.length - 1];
+    if (e.shiftKey && document.activeElement === premier) { e.preventDefault(); dernier.focus(); }
+    else if (!e.shiftKey && document.activeElement === dernier) { e.preventDefault(); premier.focus(); }
+  });
+  // si la fenêtre devient plus large que le téléphone, le panneau se ferme
+  window.addEventListener('resize', function () { if (ouvert() && window.innerWidth > 650) clore(false); });
 })();

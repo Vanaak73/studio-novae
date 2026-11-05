@@ -2,7 +2,7 @@
 const DOMAINE = 'https://studionovae.org';
 const MAIL = 'contact@studionovae.org';
 // Tous les boutons « Demander un devis » mènent à la page Contact (outil de devis) ; ceux des pages de service présélectionnent le service.
-const DEVIS = '/contact.html';
+const DEVIS = '/contact';
 
 const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -16,7 +16,7 @@ const SERVICES = [
   { slug: 'community-management', devis: 'du community management', nom: 'Community management', tuile: { img: 'reseaux-sociaux-telephone.jpg', texte: 'Une présence régulière sur vos réseaux sociaux, animée pour vous.' } },
 ];
 
-const urlService = (slug) => `/services/${slug}.html`;
+const urlService = (slug) => `/services/${slug}`;
 const devisPour = (nom) => { const s = SERVICES.find((x) => x.nom === nom); return s ? `${DEVIS}?service=${s.slug}` : DEVIS; };
 
 // Section « Des projets déjà en ligne » (accueil) et lien « Réalisations » du menu : masqués tant que la liste est courte. Passer à true pour les réafficher.

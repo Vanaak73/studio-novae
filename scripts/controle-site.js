@@ -17,8 +17,8 @@ const BASE = PROD ? PROD.replace(/\/$/, '') : `http://localhost:${PORT}`;
 
 const SERVICES = ['site-vitrine', 'outil-metier', 'boutique-en-ligne', 'automatisation-ia', 'video-ugc', 'community-management'];
 const REGIONS = require('../aides-src/donnees-regions.js').map((r) => r.slug);
-const PAGES = ['/', '/a-propos.html', ...SERVICES.map((s) => `/services/${s}.html`), '/aide-creation-site-web/', ...REGIONS.map((r) => `/aide-creation-site-web/${r}/`)];
-const PAGES_AIDES = PAGES.filter((p) => p.startsWith('/aide-creation-site-web/'));
+const PAGES = ['/', '/a-propos', ...SERVICES.map((s) => `/services/${s}`), '/aides-creation-digitale/', ...REGIONS.map((r) => `/aides-creation-digitale/${r}/`)];
+const PAGES_AIDES = PAGES.filter((p) => p.startsWith('/aides-creation-digitale/'));
 
 const att = (ms) => new Promise((r) => setTimeout(r, ms));
 const resultats = [];
@@ -50,7 +50,7 @@ async function demarrerServeur() {
           const lien = (s) => { const a = document.querySelector(s); if (!a) return null; const t = [...a.childNodes].find((x) => x.nodeType === 3 && x.textContent.trim()); if (!t) return null; const g = document.createRange(); g.selectNodeContents(t); const q = g.getBoundingClientRect(); return q.width ? Math.round(q.left) + ',' + Math.round(q.top + q.height / 2) : null; };
           return { debord: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
             haut: h ? Math.round(h.getBoundingClientRect().height) : 0, classes: h ? h.className : '', h1: document.querySelectorAll('h1').length,
-            menu: [lien('.menu-trigger'), lien('nav > a[href$="#realisations"]'), lien('nav > a[href$="#methode"]'), lien('nav > a[href$="a-propos.html"]'), lien('.nav-contact')].join(' | ') };
+            menu: [lien('.menu-trigger'), lien('nav > a[href$="#realisations"]'), lien('nav > a[href$="#methode"]'), lien('nav > a[href$="a-propos"]'), lien('.nav-contact')].join(' | ') };
         });
         const groupe = 'Pages ' + vue;
         verifier(groupe, `${url} répond 200`, rep.status() === 200, rep.erreur || rep.status());
@@ -58,7 +58,7 @@ async function demarrerServeur() {
         verifier(groupe, `${url} : aucune erreur JavaScript`, erreurs.length === 0, erreurs[0] || '');
         verifier(groupe, `${url} : pas de débordement horizontal`, !info.debord);
         if (vue === 'bureau') verifier('Mentions', `${url} : « Images : Designed by Magnific » dans le pied de page, avec lien`, await page.evaluate(() => { const a = [...document.querySelectorAll('footer a')].find((x) => /Designed by Magnific/.test(x.textContent)); return !!a && /magnific\.com/.test(a.href); }));
-        if (url.startsWith('/aide-creation-site-web/')) verifier(groupe, `${url} : un seul titre H1`, info.h1 === 1, 'h1 : ' + info.h1);
+        if (url.startsWith('/aides-creation-digitale/')) verifier(groupe, `${url} : un seul titre H1`, info.h1 === 1, 'h1 : ' + info.h1);
         if (vue === 'bureau') {
           verifier('En-tête', `${url} : taille normale en haut de page (pas de mode compact)`, info.haut === (menus.__haut = menus.__haut || info.haut) && !/plein|cache/.test(info.classes), `hauteur ${info.haut} px, classes « ${info.classes} »`);
           menus[url] = info.menu;
@@ -70,7 +70,7 @@ async function demarrerServeur() {
     for (const url of PAGES) if (url !== '/') verifier('En-tête', `${url} : menu exactement à la même place que sur l'accueil`, menus[url] === refMenu, menus[url] + '  (accueil : ' + refMenu + ')');
 
     // 2) comportement de l'en-tête : se cache en descendant, réapparaît en remontant, reste visible après un rechargement
-    for (const [url, y] of [['/', 2800], ['/aide-creation-site-web/', 900], ['/aide-creation-site-web/bretagne/', 700], ['/services/site-vitrine.html', 900]]) {
+    for (const [url, y] of [['/', 2800], ['/aides-creation-digitale/', 900], ['/aides-creation-digitale/bretagne/', 700], ['/services/site-vitrine', 900]]) {
       const page = await navigateur.newPage(); await page.setViewport({ width: 1280, height: 700 });
       await page.goto(BASE + url, { waitUntil: 'networkidle2' }); await att(400);
       const classe = () => page.evaluate(() => document.querySelector('.site-header').className);
@@ -99,7 +99,7 @@ async function demarrerServeur() {
     // 4) questionnaire du hub : parcours, retour arrière, redirection vers la page de la région
     {
       const page = await navigateur.newPage(); await page.setViewport({ width: 1280, height: 800 });
-      await page.goto(BASE + '/aide-creation-site-web/', { waitUntil: 'networkidle2' }); await att(400);
+      await page.goto(BASE + '/aides-creation-digitale/', { waitUntil: 'networkidle2' }); await att(400);
       const question = () => page.evaluate(() => document.querySelector('.qs-question') && document.querySelector('.qs-question').textContent);
       await page.click('.qs-choix button[data-v="Bretagne"]'); await att(200);
       await page.click('.qs-choix button[data-v="moins6"]'); await att(200);
@@ -110,7 +110,7 @@ async function demarrerServeur() {
       verifier('Questionnaire', 'les réponses déjà données sont conservées', garde >= 1, 'étapes validées : ' + garde);
       await page.click('.qs-choix button[data-v="Bretagne"]'); await att(200); await page.click('.qs-choix button[data-v="moins6"]'); await att(200);
       await Promise.all([page.waitForNavigation({ waitUntil: 'load' }), page.click('.qs-choix button[data-v="site"]')]);
-      verifier('Questionnaire', 'le dernier clic mène à la page de la région', /\/aide-creation-site-web\/bretagne\/$/.test(page.url()), page.url());
+      verifier('Questionnaire', 'le dernier clic mène à la page de la région', /\/aides-creation-digitale\/bretagne\/$/.test(page.url()), page.url());
       await page.close();
     }
 

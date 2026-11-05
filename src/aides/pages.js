@@ -1,6 +1,7 @@
 // Section « Aides à la création de site web » : le hub (parcours en 3 questions + FAQ) et une page par région.
 const { DOMAINE, MAIL, DEVIS, esc } = require('../site');
 const { page } = require('../layout');
+const { asset } = require('../versions');
 const REGIONS = require('./donnees-regions.js');
 
 const DATE_RELEVE = '2 novembre 2026';
@@ -19,7 +20,7 @@ const faqHtml = (items, ouvrirPremier = true) => items.map((f, i) =>
   `      <details${i === 0 && ouvrirPremier ? ' open' : ''}><summary>${esc(f.q)}</summary><p>${esc(f.r)}</p></details>`).join('\n');
 const faqLd = (items) => ({ '@type': 'FAQPage', mainEntity: items.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.r } })) });
 const fil = (...liens) => ({ '@type': 'BreadcrumbList', itemListElement: liens.map(([nom, url], i) => ({ '@type': 'ListItem', position: i + 1, name: nom, item: DOMAINE + url })) });
-const listeRegions = (courante) => REGIONS.map((r) => `<a href="/aide-creation-site-web/${r.slug}/"${r.slug === courante ? ' aria-current="page"' : ''}>${esc(r.nom)}</a>`).join('');
+const listeRegions = (courante) => REGIONS.map((r) => `<a href="/aides-creation-digitale/${r.slug}/"${r.slug === courante ? ' aria-current="page"' : ''}>${esc(r.nom)}</a>`).join('');
 const actionsDevis = `<a class="btn-aide" href="${DEVIS}">Demander un devis</a><a class="lien-contact" href="mailto:${MAIL}">Nous contacter</a>`;
 
 // ---------- Hub ----------
@@ -45,7 +46,7 @@ function hub() {
   };
   const titre = 'Aides pour créer le site web de son entreprise, selon la région — Studio Novae';
   const description = "Les aides existent pour financer le site web d'une entreprise : trois questions suffisent pour trouver celles de votre région et de votre projet.";
-  const ld = { '@context': 'https://schema.org', '@graph': [faqLd(FAQ_HUB), fil(['Accueil', '/'], ['Aides à la création de site web', '/aide-creation-site-web/'])] };
+  const ld = { '@context': 'https://schema.org', '@graph': [faqLd(FAQ_HUB), fil(['Accueil', '/'], ['Aides à la création de site web', '/aides-creation-digitale/'])] };
   const main = `
     <section class="az az-claire az-intro">
       <div class="az-in">
@@ -90,12 +91,12 @@ ${faqHtml(FAQ_HUB)}
     </section>
 `;
   return page({
-    meta: { titre, description, url: '/aide-creation-site-web/', jsonld: ld, couleur: '#eef1f9', feuilles: ['aides.css'] },
-    classeCorps: 'aides',
+    meta: { titre, description, url: '/aides-creation-digitale/', jsonld: ld, couleur: '#eef1f9', feuilles: ['aides.css'] },
+    classeCorps: 'aides aides-hub',
     main,
     scripts: `  <script>window.AIDES = ${JSON.stringify(donnees)};</script>
-  <script src="/assets/js/aides.js" defer></script>
-  <script src="/assets/js/site.js" defer></script>`,
+  <script src="${asset('/assets/js/aides.js')}" defer></script>
+  <script src="${asset('/assets/js/site.js')}" defer></script>`,
   });
 }
 
@@ -113,10 +114,10 @@ function questions(r) {
 
 function pageRegion(r) {
   const items = questions(r);
-  const url = `/aide-creation-site-web/${r.slug}/`;
+  const url = `/aides-creation-digitale/${r.slug}/`;
   const titre = `Aides pour créer son site web ${r.lieu} — Studio Novae`;
   const description = `Les aides pour financer le site web d'une entreprise ${r.lieu} : dispositifs référencés, conditions, démarches et sources.`;
-  const ld = { '@context': 'https://schema.org', '@graph': [faqLd(items), fil(['Accueil', '/'], ['Aides à la création de site web', '/aide-creation-site-web/'], [r.nom, url])] };
+  const ld = { '@context': 'https://schema.org', '@graph': [faqLd(items), fil(['Accueil', '/'], ['Aides à la création de site web', '/aides-creation-digitale/'], [r.nom, url])] };
   const cartes = r.dispositifs.map((d) => `
           <article class="az-dispo">
             <div class="az-dispo-tete"><span class="az-type">${esc(d.type)}</span><span class="fiabilite ${FIABILITE[d.niveau][1]}">${FIABILITE[d.niveau][0]}</span></div>
@@ -129,10 +130,10 @@ function pageRegion(r) {
   const main = `
     <section class="az az-claire az-intro">
       <div class="az-in">
-        <p class="fil"><a href="/aide-creation-site-web/">Aides à la création de site web</a> › ${esc(r.nom)}</p>
+        <p class="fil"><a href="/aides-creation-digitale/">Aides à la création de site web</a> › ${esc(r.nom)}</p>
         <h1>Les aides pour votre site web ${esc(r.lieu)}</h1>
         <p class="chapo">${esc(r.resume)}</p>
-        <div class="az-actions"><a class="btn-aide" href="${DEVIS}">Demander un devis</a><a class="lien-contact" href="/aide-creation-site-web/">Choisir une autre région</a></div>
+        <div class="az-actions"><a class="btn-aide" href="${DEVIS}">Demander un devis</a><a class="lien-contact" href="/aides-creation-digitale/">Choisir une autre région</a></div>
       </div>
     </section>
 
@@ -175,8 +176,8 @@ ${faqHtml(items)}
 // Retourne [{ url, html }] : le hub puis chaque région.
 function pagesAides() {
   return [
-    { url: '/aide-creation-site-web/', html: hub() },
-    ...REGIONS.map((r) => ({ url: `/aide-creation-site-web/${r.slug}/`, html: pageRegion(r) })),
+    { url: '/aides-creation-digitale/', html: hub() },
+    ...REGIONS.map((r) => ({ url: `/aides-creation-digitale/${r.slug}/`, html: pageRegion(r) })),
   ];
 }
 

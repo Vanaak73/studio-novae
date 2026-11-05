@@ -32,7 +32,7 @@ const TYPES = {
   '.mp4': 'video/mp4',
 };
 
-// Anciennes adresses des pages services -> /services/
+// Très anciennes adresses des pages services (/site-vitrine.html…) -> /services/…
 const ANCIENNES = /^\/(site-vitrine|outil-metier|boutique-en-ligne|automatisation-ia)\.html$/;
 
 // Compression Brotli ou gzip des fichiers texte, gardée en mémoire (clé : contenu + encodage).
@@ -93,8 +93,14 @@ const serveur = http.createServer((req, res) => {
   // L'accueil n'a qu'une adresse : /index.html redirige vers /
   if (chemin === '/index.html') return envoyer(res, 301, '', { Location: '/' });
 
+  // Les adresses visibles n'ont pas d'extension « .html » : une ancienne adresse redirige (301) vers la nouvelle, requête conservée
+  const requete = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
   const ancienne = chemin.match(ANCIENNES);
-  if (ancienne) return envoyer(res, 301, '', { Location: `/services/${ancienne[1]}.html` });
+  if (ancienne) return envoyer(res, 301, '', { Location: `/services/${ancienne[1]}${requete}` });
+  if (chemin.endsWith('.html')) {
+    const sansExtension = chemin.slice(0, -'.html'.length);
+    if (rendu.pages().has(sansExtension)) return envoyer(res, 301, '', { Location: sansExtension + requete });
+  }
 
   // Pages générées (accueil, services, aides, plan du site, robots.txt)
   const generee = rendu.pages().get(chemin);
@@ -117,8 +123,11 @@ const serveur = http.createServer((req, res) => {
 
   const ext = path.extname(fichier).toLowerCase();
   const type = TYPES[ext] || 'application/octet-stream';
-  // Images et polices : 30 jours ; css et js : 1 jour (les noms de fichiers ne changent pas à chaque version).
-  const entetes = { 'Content-Type': type, 'Cache-Control': /^\.(css|js)$/.test(ext) ? 'public, max-age=86400' : 'public, max-age=2592000', Vary: 'Accept-Encoding' };
+  // Images et polices : 30 jours. Css et js : 1 an quand l'adresse porte son numéro de version (?v=…, voir src/versions.js : le numéro change dès que le fichier change),
+  // 1 jour sans numéro (anciennes adresses déjà en cache chez des visiteurs).
+  const versionne = /(?:^|&)v=[0-9a-f]{6,}(?:&|$)/i.test(requete.slice(1));
+  const duree = /^\.(css|js)$/.test(ext) ? (versionne ? 'public, max-age=31536000, immutable' : 'public, max-age=86400') : 'public, max-age=2592000';
+  const entetes = { 'Content-Type': type, 'Cache-Control': duree, Vary: 'Accept-Encoding' };
   if (req.method === 'HEAD') return envoyer(res, 200, '', entetes);
   if (NOINDEX) entetes['X-Robots-Tag'] = 'noindex, nofollow, noarchive';
   entetes['X-Content-Type-Options'] = 'nosniff';

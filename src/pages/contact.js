@@ -3,6 +3,7 @@
 // la demande est enregistrée sur le serveur et envoyée par e-mail. La logique de la page est dans public_html/assets/js/contact.js.
 const { DOMAINE, MAIL, SERVICES, esc } = require('../site');
 const { page } = require('../layout');
+const { asset } = require('../versions');
 
 // Libellés courts des choix de service (valeur envoyée dans le message), dans l'ordre des menus.
 const LIBELLES = {
@@ -14,7 +15,7 @@ const LIBELLES = {
   'community-management': 'Community management',
 };
 
-const URL_CONTACT = '/contact.html';
+const URL_CONTACT = '/contact';
 const TITRE = 'Contact et devis | Studio Novae';
 const DESCRIPTION = 'Demandez un devis détaillé ou posez une question à Studio Novae : site vitrine, outil sur mesure, boutique en ligne, automatisation IA.';
 
@@ -51,7 +52,7 @@ ${choix}
                       <textarea id="besoin" placeholder="Exemple : je suis couvreur à Morlaix et je souhaite un site qui présente mes réalisations."></textarea></label>
                     <label class="champ">Quand souhaitez-vous démarrer ?
                       <select id="delai"><option value="">Choisir</option><option>Dès que possible</option><option>Dans les 3 mois</option><option>Dans l'année</option><option>Je me renseigne</option></select></label>
-                    <label class="case"><input type="checkbox" id="aide"> <span>Je souhaite connaître les aides qui peuvent financer ce projet. <a class="lien" href="/aide-creation-site-web/">Voir les aides</a></span></label>
+                    <label class="case"><input type="checkbox" id="aide"> <span>Je souhaite connaître les aides qui peuvent financer ce projet. <a class="lien" href="/aides-creation-digitale/">Voir les aides</a></span></label>
                   </div>
                   <div class="bloc-form">
                     <h3><b>3</b>Vos coordonnées</h3>
@@ -106,7 +107,7 @@ ${choix}
     },
     classeCorps: 'page-contact',
     main,
-    scripts: '  <script src="/assets/js/site.js" defer></script>\n  <script src="/assets/js/contact.js" defer></script>',
+    scripts: `  <script src="${asset('/assets/js/site.js')}" defer></script>\n  <script src="${asset('/assets/js/contact.js')}" defer></script>`,
   });
 }
 

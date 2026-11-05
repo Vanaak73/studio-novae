@@ -152,6 +152,8 @@ nav > a:hover, .menu-trigger:hover, .has-menu:focus-within .menu-trigger { color
   transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
 }
 .has-menu:hover .submenu, .has-menu:focus-within .submenu { opacity: 1; visibility: visible; transform: none; }
+/* En-tête replié : le sous-menu se replie avec lui */
+.site-header.cache .has-menu:hover .submenu, .site-header.cache .has-menu:focus-within .submenu { opacity: 0; visibility: hidden; transform: translateY(6px); pointer-events: none; }
 .submenu a {
   display: block;
   padding: 10px 12px;
@@ -458,11 +460,14 @@ footer p { margin: 8px 0 0; max-width: 320px; }
   .page-section .section-heading + * { margin-top: 32px; }
 }
 
+/* Menu burger : caché sur grand écran, affiché à 650 px et moins (styles du bouton et du panneau en fin de fichier) */
+.burger { display: none; }
 @media (max-width: 650px) {
   :root { --gutter: 12px; }
   .site-header { padding: 22px var(--gutter); }
   nav { gap: 14px; }
-  nav > a:not(.nav-contact), .has-menu { display: none; }
+  .site-header nav { display: none; }
+  .burger { display: flex; }
   .hero { min-height: 88vh; }
   .page-hero { min-height: 56vh; }
   .hero-content { padding-top: 20vh; }
@@ -503,12 +508,8 @@ footer p { margin: 8px 0 0; max-width: 320px; }
   font-family: var(--display); font-weight: 600; font-size: 0.98rem; line-height: normal; text-decoration: none; opacity: 1 !important; white-space: nowrap; transition: background .2s, transform .2s; }
 .btn-devis:hover { background: #c4ec84; transform: translateY(-1px); }
 .hero-actions { display: flex; align-items: center; justify-content: flex-end; position: relative; z-index: 30; } /* le bouton passe devant l'en-tête (z-index 20) */
-/* « Voir les services » : en haut de la section suivante, sous la colonne du bouton « Demander un devis » */
-/* Le lien se pose juste sous le bord de l'image (14 px plus bas) ; la marge basse garde le titre à sa place */
-.lien-offres { width: 192px; margin: calc(14px - 11vw) 0 calc(9vw - 14px) auto; text-align: center; }
-@media (max-width: 650px) { .lien-offres { width: auto; margin: calc(14px - 11vw) 0 calc(7vw + 10px) 0; text-align: left; } }
 /* En-tête : le bouton n'apparaît que sur grand écran (il ne tient pas à côté du menu en dessous de 950 px) */
-@media (max-width: 950px) { nav > a.nav-devis { display: none; } }
+@media (max-width: 950px) { nav > a.nav-devis { display: none; } .hero-actions { z-index: 10; } } /* 950 px et moins : le bouton du hero ne s'intègre plus à l'en-tête, il passe derrière lui (z-index 10 < 20) */
 @media (prefers-reduced-motion: reduce) { .site-header { transition: none; } }
 
 /* Relais entre les deux boutons « Demander un devis » : visibility garde la place, le menu ne bouge pas */
@@ -613,3 +614,27 @@ nav > a:not(.nav-devis)::after, .menu-trigger::after { left: 10px; right: 10px; 
    (et retire les deux classes à la fin). Sans script (pas de classe .js) ou avec « réduire les animations », tout reste visible. */
 .js .rv { opacity: 0; transform: translateY(70px); }
 .js .rv.vu { opacity: 1; transform: none; transition: opacity 0.6s ease-out var(--rv-delai, 0s), transform 1s cubic-bezier(0.16, 1, 0.3, 1) var(--rv-delai, 0s); }
+
+/* Menu burger (650 px et moins) : bouton dans l'en-tête, panneau plein écran bleu nuit par-dessus tout */
+.burger { flex-direction: column; justify-content: center; gap: 6px; width: 44px; height: 44px; margin: -10px -10px -10px 0; padding: 10px; border: 0; background: transparent; cursor: pointer; }
+.burger span { display: block; height: 2px; border-radius: 2px; background: #fff; }
+.burger:focus-visible, .menu-fermer:focus-visible, .menu-mobile a:focus-visible { outline: 2px solid var(--accent-soft); outline-offset: 3px; }
+.menu-mobile { position: fixed; inset: 0; z-index: 60; display: flex; flex-direction: column; padding: 22px var(--gutter) 28px; background: #0a1230; overflow-y: auto; visibility: hidden; opacity: 0; transform: translateY(-14px); transition: opacity .25s ease, transform .25s ease, visibility 0s linear .25s; }
+.menu-mobile.ouvert { visibility: visible; opacity: 1; transform: none; transition: opacity .25s ease, transform .25s ease, visibility 0s; }
+.menu-mobile-tete { display: flex; align-items: center; justify-content: space-between; }
+.menu-fermer { position: relative; width: 44px; height: 44px; margin: -10px -10px -10px 0; border: 0; background: transparent; cursor: pointer; }
+.menu-fermer span { position: absolute; left: 10px; right: 10px; top: 50%; height: 2px; border-radius: 2px; background: #fff; transform: rotate(45deg); }
+.menu-fermer span + span { transform: rotate(-45deg); }
+.menu-mobile .menu-mobile-liens { display: flex; flex-direction: column; align-items: stretch; gap: 4px; margin: 64px 0 0; flex: 1; text-align: left; }
+.menu-mobile .menu-mobile-liens > a:not(.btn-devis) { opacity: 1; margin: 0; padding-left: 0; padding-right: 0; }
+.menu-mobile-liens > a::after { display: none !important; }
+.menu-mobile:focus { outline: none; }
+.menu-mobile-liens a:not(.btn-devis) { font-family: var(--display); font-size: 1.3rem; font-weight: 500; line-height: 1.2; letter-spacing: -.01em; color: #fff; text-decoration: none; padding: 9px 0; }
+.menu-mobile-liens a:not(.btn-devis):hover, .menu-mobile-liens a:not(.btn-devis):active { color: var(--vif); }
+.menu-mobile-titre { margin: 0 0 2px; font: 700 .72rem var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+.menu-mobile-liens > a:nth-of-type(-n+6) { font-weight: 400 !important; color: rgba(238, 241, 250, .86) !important; padding: 6px 0 !important; }
+.menu-mobile-trait { display: block; height: 1px; margin: 14px 0; background: rgba(238, 241, 250, .16); }
+.menu-mobile .menu-mobile-liens > .btn-devis { opacity: 1; margin: auto 0 0 0; align-self: stretch; justify-content: center; padding: 16px; }
+html.menu-ouvert { overflow: hidden; }
+@media (min-width: 651px) { .menu-mobile { display: none; } }
+@media (prefers-reduced-motion: reduce) { .menu-mobile, .menu-mobile.ouvert { transition: none; } }
